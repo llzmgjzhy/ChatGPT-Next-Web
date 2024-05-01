@@ -41,6 +41,8 @@ dev
 
 # docker-compose env files
 .env
+# frontend env
+.env.local
 
 *.key
 *.key.pub
