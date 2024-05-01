@@ -73,6 +73,7 @@
 
 .icon-button-text {
   font-size: 12px;
+  font-weight: bold; /* Added font-weight property */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -80,4 +81,9 @@
   &:not(:first-child) {
     margin-left: 5px;
   }
+}
+
+.login-button-text {
+  // font-size: 14px;
+  // font-weight: bold;
 }

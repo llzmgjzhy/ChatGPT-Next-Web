@@ -318,11 +318,22 @@
   padding-top: 20px;
 }
 
+
+.sidebar-tail-bar {
+  display: flex;
+  flex-grow: 1;
+}
+
+
+.sidebar-tail-bar-button {
+  flex-grow: 1;
+}
+
 .sidebar-actions {
   display: inline-flex;
 }
 
-.sidebar-action:not(:last-child) {
+.sidebar-action {
   margin-right: 15px;
 }
 

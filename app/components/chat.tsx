@@ -1122,7 +1122,7 @@ function _Chat() {
       if (!isVisionModel(currentModel)) {
         return;
       }
-      const items = (event.clipboardData || window.clipboardData).items;
+      const items = (event.clipboardData || window.Clipboard).items;
       for (const item of items) {
         if (item.kind === "file" && item.type.startsWith("image/")) {
           event.preventDefault();
@@ -1467,9 +1467,9 @@ function _Chat() {
       </div>
 
       <div className={styles["chat-input-panel"]}>
-        <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} />
+        {/* <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} /> */}
 
-        <ChatActions
+        {/* <ChatActions
           uploadImage={uploadImage}
           setAttachImages={setAttachImages}
           setUploading={setUploading}
@@ -1488,7 +1488,7 @@ function _Chat() {
             setUserInput("/");
             onSearch("");
           }}
-        />
+        /> */}
         <label
           className={`${styles["chat-input-panel-inner"]} ${
             attachImages.length != 0
@@ -1539,7 +1539,7 @@ function _Chat() {
           )}
           <IconButton
             icon={<SendWhiteIcon />}
-            text={Locale.Chat.Send}
+            // text={Locale.Chat.Send}
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}

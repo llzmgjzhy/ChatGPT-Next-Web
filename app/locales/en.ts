@@ -69,12 +69,15 @@ const en: LocaleType = {
     },
     Rename: "Rename Chat",
     Typing: "Typing…",
+    // Input: (submitKey: string) => {
+    //   var inputHints = `${submitKey} 发送`;
+    //   if (submitKey === String(SubmitKey.Enter)) {
+    //     inputHints += "，Shift + Enter 换行";
+    //   }
+    //   return inputHints + "，/ 触发补全，: 触发命令";
+    // },
     Input: (submitKey: string) => {
-      var inputHints = `${submitKey} to send`;
-      if (submitKey === String(SubmitKey.Enter)) {
-        inputHints += ", Shift + Enter to wrap";
-      }
-      return inputHints + ", / to search prompts, : to use commands";
+      return "Message MedImind...";
     },
     Send: "Send",
     Config: {
@@ -414,6 +417,12 @@ const en: LocaleType = {
   },
   FineTuned: {
     Sysmessage: "You are an assistant that",
+  },
+  ChatBot: {
+    Name: "Chat",
+  },
+  HomeWork: {
+    Name: "Homework",
   },
   Mask: {
     Name: "Mask",
