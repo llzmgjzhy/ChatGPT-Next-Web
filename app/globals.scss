@@ -1,5 +1,5 @@
-@import "./animation.scss";
-@import "./window.scss";
+@import "@/app/styles/animation.scss";
+@import "@/app/styles/window.scss";
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -93,7 +93,7 @@
 html {
   height: var(--full-height);
 
-  font-family: sans-serif, "SF Pro Text", "SF Pro SC", "Helvetica Neue",
+  font-family:  "SF Pro Text", "SF Pro SC",sans-serif, "Helvetica Neue",
     "PingFang SC", "Noto Sans", "SF Pro Icons", "Helvetica", "Arial";
 }
 
@@ -152,10 +152,10 @@ label {
   cursor: pointer;
 }
 
-// input {
-//   text-align: center;
-//   font-family: inherit;
-// }
+input {
+  text-align: center;
+  font-family: inherit;
+}
 
 input[type="checkbox"] {
   cursor: pointer;
@@ -404,7 +404,7 @@ pre {
 
   /* Gold */
   --gold: #b8860b;
-  --gold-lightest: #f0ebdd;;
+  --gold-lightest: #f0ebdd;
 
   /* Error */
   --dangerous-dark: #e30c17;

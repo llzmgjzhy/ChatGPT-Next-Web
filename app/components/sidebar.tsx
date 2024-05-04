@@ -7,6 +7,7 @@ import SettingsIcon from "../icons/settings.svg";
 import GithubIcon from "../icons/github.svg";
 import ChatGptIcon from "../icons/chatgpt.svg";
 import MedImindIcon from "../icons/medimind.svg";
+import { MedImindLogo } from "@/lib/assets/MedImindLogo";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import DeleteIcon from "../icons/delete.svg";
@@ -17,6 +18,8 @@ import DragIcon from "../icons/drag.svg";
 import Locale from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
+
+import { useLocation } from "react-router-dom";
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -131,6 +134,8 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
+  const location = useLocation();
+  const isHomeWork = location.pathname === Path.HomeWork;
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -162,7 +167,9 @@ export function SideBar(props: { className?: string }) {
           chat with a medical AI
         </div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
-          <MedImindIcon />
+          {/* <MedImindIcon />
+           */}
+          <MedImindLogo size={50} />
         </div>
       </div>
 
@@ -171,20 +178,25 @@ export function SideBar(props: { className?: string }) {
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.ChatBot.Name}
           className={styles["sidebar-bar-button"]}
-          onClick={() => {
-            if (config.dontShowMaskSplashScreen !== true) {
-              navigate(Path.NewChat, { state: { fromHome: true } });
-            } else {
-              navigate(Path.Masks, { state: { fromHome: true } });
-            }
-          }}
+          onClick={() =>
+            //   {
+            //   if (config.dontShowMaskSplashScreen !== true) {
+            //     navigate(Path.NewChat, { state: { fromHome: true } });
+            //   } else {
+            //     navigate(Path.Masks, { state: { fromHome: true } });
+            //   }
+            // }
+            navigate(Path.Chat, { state: { fromHome: true } })
+          }
           shadow
         />
         <IconButton
           icon={<PluginIcon />}
           text={shouldNarrow ? undefined : Locale.HomeWork.Name}
           className={styles["sidebar-bar-button"]}
-          onClick={() => showToast(Locale.WIP)}
+          onClick={() => {
+            navigate(Path.HomeWork, { state: { fromHome: true } });
+          }}
           shadow
         />
       </div>
@@ -214,7 +226,11 @@ export function SideBar(props: { className?: string }) {
           </div>
           <div className={styles["sidebar-action"]}>
             <Link to={Path.Settings}>
-              <IconButton icon={<SettingsIcon />} shadow />
+              <IconButton
+                icon={<SettingsIcon />}
+                text={shouldNarrow ? undefined : Locale.Home.Settings}
+                shadow
+              />
             </Link>
           </div>
           {/* <div className={styles["sidebar-action"]}>
@@ -223,22 +239,24 @@ export function SideBar(props: { className?: string }) {
             </a>
           </div> */}
         </div>
-        <div className={styles["sidebar-tail-bar"]}>
-          <IconButton
-            icon={<AddIcon />}
-            text={shouldNarrow ? undefined : Locale.Home.NewChat}
-            className={styles["sidebar-tail-bar-button"]}
-            onClick={() => {
-              if (config.dontShowMaskSplashScreen) {
-                chatStore.newSession();
-                navigate(Path.Chat);
-              } else {
-                navigate(Path.NewChat);
-              }
-            }}
-            shadow
-          />
-        </div>
+        {!isHomeWork && (
+          <div className={styles["sidebar-tail-bar"]}>
+            <IconButton
+              icon={<AddIcon />}
+              text={shouldNarrow ? undefined : Locale.Home.NewChat}
+              className={styles["sidebar-tail-bar-button"]}
+              onClick={() => {
+                if (config.dontShowMaskSplashScreen) {
+                  chatStore.newSession();
+                  navigate(Path.Chat);
+                } else {
+                  navigate(Path.NewChat);
+                }
+              }}
+              shadow
+            />
+          </div>
+        )}
       </div>
 
       <div

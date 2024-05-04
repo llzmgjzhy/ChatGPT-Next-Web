@@ -16,6 +16,8 @@ import { ModelProvider, Path, SlotID } from "../constant";
 import { ErrorBoundary } from "./error";
 
 import { getISOLang, getLang } from "../locales";
+import { useSupabase } from "@/lib/context/SupabaseProvider";
+import { redirectToLogin } from "@/lib/router/redirectToLogin";
 
 import {
   HashRouter as Router,
@@ -160,6 +162,7 @@ function Screen() {
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
+              <Route path={Path.HomeWork} element={<Chat />} />
             </Routes>
           </div>
         </>
@@ -192,6 +195,15 @@ export function Home() {
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
+  // confirm if login
+  const { session } = useSupabase();
+  console.log("这是", session);
+
+  useEffect(() => {
+    if (session?.user == undefined) {
+      redirectToLogin();
+    }
+  }, [session?.user]);
 
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());

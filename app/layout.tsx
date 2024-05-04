@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import "./styles/globals.scss";
+import "./globals.scss";
 import "./styles/markdown.scss";
 import "./styles/highlight.scss";
 import { getClientConfig } from "./config/client";
@@ -10,11 +10,12 @@ import { getServerSideConfig } from "./config/server";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { SupabaseProvider } from "@/lib/context/SupabaseProvider";
 import { cookies } from "next/headers";
+import { Toaster } from "@/components/ui/toaster";
 const serverConfig = getServerSideConfig();
 
 export const metadata: Metadata = {
-  title: "NextChat",
-  description: "Your personal ChatGPT Chat Bot.",
+  title: "MedImind",
+  description: "Study with MedImind",
   viewport: {
     width: "device-width",
     initialScale: 1,
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     { media: "(prefers-color-scheme: dark)", color: "#151515" },
   ],
   appleWebApp: {
-    title: "NextChat",
+    title: "MedImind",
     statusBarStyle: "default",
   },
 };
@@ -58,6 +59,7 @@ const RootLayout = async ({
       </head>
       <body>
         <SupabaseProvider session={session}>{children}</SupabaseProvider>
+        <Toaster />
         {serverConfig?.isVercel && (
           <>
             <SpeedInsights />

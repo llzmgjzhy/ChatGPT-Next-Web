@@ -2,12 +2,13 @@ import { useFormContext } from "react-hook-form";
 
 import { EmailAuthContextType } from "@/app/(auth)/login/types";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
-import { useToast } from "@/lib/hooks/useToast";
+// import { useToast } from "@/lib/hooks/useToast";
+import { useToast } from "@/components/ui/use-toast";
 import Locale from "@/app/locales";
 
 export const usePasswordLogin = () => {
   const { supabase } = useSupabase();
-  const { publish } = useToast();
+  const { toast } = useToast();
   const { watch, setValue } = useFormContext<EmailAuthContextType>();
 
   const email = watch("email");
@@ -15,18 +16,19 @@ export const usePasswordLogin = () => {
 
   const handlePasswordLogin = async () => {
     if (email === "") {
-      publish({
-        variant: "danger",
-        text: Locale.errorMailMissed.Name,
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: Locale.errorMailMissed.Name,
       });
 
       return;
     }
 
     if (password === "") {
-      publish({
-        variant: "danger",
-        text: Locale.errorPasswordMissed.Name,
+      toast({
+        variant: "destructive",
+        description: Locale.errorPasswordMissed.Name,
       });
 
       return;
@@ -36,17 +38,17 @@ export const usePasswordLogin = () => {
       email,
       password,
     });
-    alert("error");
+    // alert(error);
     setValue("isPasswordSubmitting", false);
     setValue("isPasswordSubmitted", true);
 
     if (error) {
-      publish({
-        variant: "danger",
-        text: error.message,
+      toast({
+        variant: "destructive",
+        description: error.message,
       });
 
-      throw error; // this error is caught by react-hook-form
+      // throw error; // this error is caught by react-hook-form
     }
   };
 

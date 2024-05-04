@@ -1227,9 +1227,9 @@ function _Chat() {
           >
             {!session.topic ? DEFAULT_TOPIC : session.topic}
           </div>
-          <div className="window-header-sub-title">
+          {/* <div className="window-header-sub-title">
             {Locale.Chat.SubTitle(session.messages.length)}
-          </div>
+          </div> */}
         </div>
         <div className="window-actions">
           {!isMobileScreen && (
@@ -1467,9 +1467,9 @@ function _Chat() {
       </div>
 
       <div className={styles["chat-input-panel"]}>
-        {/* <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} /> */}
+        <PromptHints prompts={promptHints} onPromptSelect={onPromptSelect} />
 
-        {/* <ChatActions
+        <ChatActions
           uploadImage={uploadImage}
           setAttachImages={setAttachImages}
           setUploading={setUploading}
@@ -1488,7 +1488,7 @@ function _Chat() {
             setUserInput("/");
             onSearch("");
           }}
-        /> */}
+        />
         <label
           className={`${styles["chat-input-panel-inner"]} ${
             attachImages.length != 0
