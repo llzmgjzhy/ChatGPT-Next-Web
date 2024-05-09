@@ -601,15 +601,16 @@
 }
 
 .chat-input-panel-inner:has(.chat-input:focus) {
-  border: 1px solid var(--primary);
+  // border: 1px solid var(--primary);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .chat-input {
   height: 100%;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 1rem;
   border: none;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.03);
+  //box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.03);
   background-color: var(--white);
   color: var(--black);
   font-family: inherit;
@@ -618,14 +619,16 @@
   outline: none;
   box-sizing: border-box;
   min-height: 58px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
 }
 
 .chat-input:focus {
+  box-shadow: none;
 }
+
 
 .chat-input-send {
   background-color: var(--primary);

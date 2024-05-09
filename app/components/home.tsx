@@ -197,7 +197,6 @@ export function Home() {
   useHtmlLang();
   // confirm if login
   const { session } = useSupabase();
-  console.log("这是", session);
 
   useEffect(() => {
     if (session?.user == undefined) {
@@ -207,6 +206,7 @@ export function Home() {
 
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());
+    console.log(session);
     useAccessStore.getState().fetch();
   }, []);
 
