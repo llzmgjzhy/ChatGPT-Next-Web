@@ -130,6 +130,7 @@ const en: LocaleType = {
     DeleteChat: "Confirm to delete the selected conversation?",
     DeleteToast: "Chat Deleted",
     Revert: "Revert",
+    Settings: "Setting",
   },
   Settings: {
     Title: "Settings",
@@ -423,6 +424,15 @@ const en: LocaleType = {
   },
   HomeWork: {
     Name: "Homework",
+  },
+  TalkTo: {
+    Name: "Talk to",
+  },
+  errorMailMissed: {
+    Name: "errorMailMissed",
+  },
+  errorPasswordMissed: {
+    Name: "errorPasswordMissed",
   },
   Mask: {
     Name: "Mask",

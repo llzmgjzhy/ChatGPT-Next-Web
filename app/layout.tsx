@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import "./globals.scss";
 import "./styles/markdown.scss";
 import "./styles/highlight.scss";
@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { SupabaseProvider } from "@/lib/context/SupabaseProvider";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Toaster } from "@/components/ui/toaster";
 const serverConfig = getServerSideConfig();
 
@@ -39,8 +39,8 @@ const RootLayout = async ({
   /**
    * The Supabase client instance.
    */
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  // const cookieStore = cookies();
+  const supabase = createServerComponentSupabaseClient({ headers, cookies });
 
   const {
     data: { session },
