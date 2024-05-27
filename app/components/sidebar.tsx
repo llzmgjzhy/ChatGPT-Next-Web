@@ -1,23 +1,23 @@
 import { useEffect, useRef, useMemo } from "react";
 
-import styles from "./home.module.scss";
+import styles from "@/app/components/home.module.scss";
 
-import { IconButton } from "./button";
-import SettingsIcon from "../icons/settings.svg";
-import GithubIcon from "../icons/github.svg";
-import ChatGptIcon from "../icons/chatgpt.svg";
-import MedImindIcon from "../icons/medimind.svg";
+import { IconButton } from "@/app/components/button";
+import SettingsIcon from "@/app/icons/settings.svg";
+import GithubIcon from "@/app/icons/github.svg";
+import ChatGptIcon from "@/app/icons/chatgpt.svg";
+import MedImindIcon from "@/app/icons/medimind.svg";
 import { MedImindLogo } from "@/lib/assets/MedImindLogo";
-import AddIcon from "../icons/add.svg";
-import CloseIcon from "../icons/close.svg";
-import DeleteIcon from "../icons/delete.svg";
-import MaskIcon from "../icons/chat.svg";
-import PluginIcon from "../icons/edit.svg";
-import DragIcon from "../icons/drag.svg";
+import AddIcon from "@/app/icons/add.svg";
+import CloseIcon from "@/app/icons/close.svg";
+import DeleteIcon from "@/app/icons/delete.svg";
+import MaskIcon from "@/app/icons/chat.svg";
+import PluginIcon from "@/app/icons/edit.svg";
+import DragIcon from "@/app/icons/drag.svg";
 
-import Locale from "../locales";
+import Locale from "@/app/locales";
 
-import { useAppConfig, useChatStore } from "../store";
+import { useAppConfig, useChatStore } from "@/app/store";
 
 import { useLocation } from "react-router-dom";
 
@@ -28,16 +28,20 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
-} from "../constant";
+} from "@/app/constant";
+import { useRouter } from "next/navigation";
 
 import { Link, useNavigate } from "react-router-dom";
-import { isIOS, useMobileScreen } from "../utils";
+import { isIOS, useMobileScreen } from "@/app/utils";
 import dynamic from "next/dynamic";
-import { showConfirm, showToast } from "./ui-lib";
+import { showConfirm, showToast } from "@/app/components/ui-lib";
 
-const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
-  loading: () => null,
-});
+const ChatList = dynamic(
+  async () => (await import("@/app/components/chat-list")).ChatList,
+  {
+    loading: () => null,
+  },
+);
 
 function useHotKey() {
   const chatStore = useChatStore();
@@ -137,6 +141,8 @@ export function SideBar(props: { className?: string }) {
   const location = useLocation();
   const isHomeWork = location.pathname === Path.HomeWork;
 
+  const router = useRouter();
+
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
@@ -225,13 +231,16 @@ export function SideBar(props: { className?: string }) {
             />
           </div>
           <div className={styles["sidebar-action"]}>
-            <Link to={Path.Settings}>
-              <IconButton
-                icon={<SettingsIcon />}
-                text={shouldNarrow ? undefined : Locale.Home.Settings}
-                shadow
-              />
-            </Link>
+            {/* <Link to={Path.Settings}> */}
+            <IconButton
+              icon={<SettingsIcon />}
+              text={shouldNarrow ? undefined : Locale.Home.Settings}
+              onClick={() => {
+                router.push("/settings");
+              }}
+              shadow
+            />
+            {/* </Link> */}
           </div>
           {/* <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">

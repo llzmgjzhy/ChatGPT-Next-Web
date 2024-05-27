@@ -72,6 +72,7 @@ import { useSyncStore } from "../store/sync";
 import { nanoid } from "nanoid";
 import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
+import { useLogoutModal } from "../../lib/hooks/useLogoutModal";
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -230,6 +231,12 @@ function UserPromptModal(props: { onClose?: () => void }) {
 function DangerItems() {
   const chatStore = useChatStore();
   const appConfig = useAppConfig();
+  const {
+    handleLogout,
+    isLoggingOut,
+    isLogoutModalOpened,
+    setIsLogoutModalOpened,
+  } = useLogoutModal();
 
   return (
     <List>
@@ -256,6 +263,20 @@ function DangerItems() {
           onClick={async () => {
             if (await showConfirm(Locale.Settings.Danger.Clear.Confirm)) {
               chatStore.clearAllData();
+            }
+          }}
+          type="danger"
+        />
+      </ListItem>
+      <ListItem
+        title={Locale.Settings.Danger.LogOut.Title}
+        subTitle={Locale.Settings.Danger.LogOut.SubTitle}
+      >
+        <IconButton
+          text={Locale.Settings.Danger.LogOut.Action}
+          onClick={async () => {
+            if (await showConfirm(Locale.Settings.Danger.LogOut.Confirm)) {
+              handleLogout();
             }
           }}
           type="danger"

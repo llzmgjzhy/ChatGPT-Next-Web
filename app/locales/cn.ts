@@ -146,6 +146,12 @@ const cn = {
         Action: "立即清除",
         Confirm: "确认清除所有聊天、设置数据？",
       },
+      LogOut: {
+        Title: "退出登录",
+        SubTitle: "退出登录",
+        Action: "退出登录",
+        Confirm: "确定退出登录",
+      },
     },
     Lang: {
       Name: "Language", // ATTENTION: if you wanna add a new translation, please do not translate this value, leave it as `Language`

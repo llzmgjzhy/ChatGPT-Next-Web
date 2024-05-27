@@ -10,6 +10,7 @@ import { getServerSideConfig } from "./config/server";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { SupabaseProvider } from "@/lib/context/SupabaseProvider";
 import { cookies, headers } from "next/headers";
+import { App } from "./App";
 import { Toaster } from "@/components/ui/toaster";
 const serverConfig = getServerSideConfig();
 
@@ -58,7 +59,9 @@ const RootLayout = async ({
         <script src="/serviceWorkerRegister.js" defer></script>
       </head>
       <body>
-        <SupabaseProvider session={session}>{children}</SupabaseProvider>
+        <SupabaseProvider session={session}>
+          <App>{children}</App>
+        </SupabaseProvider>
         <Toaster />
         {serverConfig?.isVercel && (
           <>

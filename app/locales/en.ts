@@ -148,6 +148,12 @@ const en: LocaleType = {
         Action: "Clear",
         Confirm: "Confirm to clear all messages and settings?",
       },
+      LogOut: {
+        Title: "Sign Out",
+        SubTitle: "Sign Out",
+        Action: "Sign Out",
+        Confirm: "are you sure to sign out?",
+      },
     },
     Lang: {
       Name: "Language", // ATTENTION: if you wanna add a new translation, please do not translate this value, leave it as `Language`

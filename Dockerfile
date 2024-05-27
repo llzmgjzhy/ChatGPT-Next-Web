@@ -17,6 +17,28 @@ FROM base AS builder
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories 
 RUN apk update && apk add --no-cache git
 
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_ENV
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG SUPABASE_URL
+
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_ENV=$NEXT_PUBLIC_ENV
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV SUPABASE_URL=$SUPABASE_URL
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN yarn config set registry 'https://registry.npmmirror.com/'
+RUN yarn build
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
 ARG PROXY_URL
 ARG OPENAI_API_KEY
 ARG GOOGLE_API_KEY
@@ -34,18 +56,6 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_ENV=$NEXT_PUBLIC_ENV
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV SUPABASE_URL=$SUPABASE_URL
-
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-RUN yarn config set registry 'https://registry.npmmirror.com/'
-RUN yarn build
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories 
 RUN apk update && apk add --no-cache git
