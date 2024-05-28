@@ -8,6 +8,8 @@ import { useAppConfig } from "@/app/store/config";
 import { getClientConfig } from "@/app/config/client";
 import { useMobileScreen } from "@/app/utils";
 import { getLang } from "@/app/locales";
+import { ChatsProvider } from "@/lib/context/ChatsProvider";
+import { ChatProvider } from "@/lib/context";
 
 const App = ({ children }: PropsWithChildren): JSX.Element => {
   const config = useAppConfig();
@@ -36,7 +38,11 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
 const AppWithQueryClient = ({ children }: PropsWithChildren): JSX.Element => {
   return (
     <>
-      <App>{children}</App>
+      <ChatsProvider>
+        <ChatProvider>
+          <App>{children}</App>
+        </ChatProvider>
+      </ChatsProvider>
     </>
   );
 };

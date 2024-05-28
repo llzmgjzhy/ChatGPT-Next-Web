@@ -28,6 +28,7 @@ export const PasswordLogin = (): JSX.Element => {
             inputValue={field.value as string}
             setInputValue={field.onChange}
             crypted={true}
+            onSubmit={handlePasswordLogin}
           />
         )}
       />

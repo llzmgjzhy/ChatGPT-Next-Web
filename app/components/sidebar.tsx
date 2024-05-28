@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useMemo } from "react";
 
 import styles from "@/app/components/home.module.scss";
@@ -255,12 +257,14 @@ export function SideBar(props: { className?: string }) {
               text={shouldNarrow ? undefined : Locale.Home.NewChat}
               className={styles["sidebar-tail-bar-button"]}
               onClick={() => {
-                if (config.dontShowMaskSplashScreen) {
-                  chatStore.newSession();
-                  navigate(Path.Chat);
-                } else {
-                  navigate(Path.NewChat);
-                }
+                // if (config.dontShowMaskSplashScreen) {
+                //   chatStore.newSession();
+                //   navigate(Path.Chat);
+                // } else {
+                //   navigate(Path.NewChat);
+                // }
+                chatStore.newSession();
+                navigate(Path.Chat);
               }}
               shadow
             />
