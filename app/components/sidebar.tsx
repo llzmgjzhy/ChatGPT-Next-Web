@@ -264,7 +264,8 @@ export function SideBar(props: { className?: string }) {
                 //   navigate(Path.NewChat);
                 // }
                 chatStore.newSession();
-                navigate(Path.Chat);
+                // navigate(Path.Chat);
+                router.push("/chat");
               }}
               shadow
             />

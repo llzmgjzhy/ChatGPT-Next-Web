@@ -1,3 +1,5 @@
+"use client";
+
 import { useDebouncedCallback } from "use-debounce";
 import React, {
   useState,
@@ -7,6 +9,7 @@ import React, {
   useCallback,
   Fragment,
   RefObject,
+  use,
 } from "react";
 
 import SendWhiteIcon from "../icons/send-white.svg";
@@ -97,6 +100,8 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
+import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
+import { useAxios } from "@/lib/hooks";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -759,6 +764,16 @@ function _Chat() {
     }
   };
 
+  const { addNewChat, updateChatName } = useChat();
+
+  // if session.topic change,update supabase chat name
+  useEffect(() => {
+    if (session.chat_id && session.topic !== DEFAULT_TOPIC) {
+      updateChatName(session.chat_id, session.topic);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.chat_id, session.topic]);
+
   const doSubmit = (userInput: string) => {
     if (userInput.trim() === "") return;
     const matchCommand = chatCommands.match(userInput);
@@ -769,9 +784,16 @@ function _Chat() {
       return;
     }
     setIsLoading(true);
-    chatStore
-      .onUserInput(userInput, attachImages)
-      .then(() => setIsLoading(false));
+    // add new chat to supabase
+    if (!session.chat_id) {
+      addNewChat(session.topic).then((chatId) => {
+        session.chat_id = chatId;
+      });
+    }
+    chatStore.onUserInput(userInput, attachImages).then(() => {
+      setIsLoading(false);
+    });
+
     setAttachImages([]);
     localStorage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");

@@ -19,6 +19,9 @@ import { Mask } from "../store/mask";
 import { useRef, useEffect } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
+import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
+import { useRouter } from "next/navigation";
+import { it } from "node:test";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -112,7 +115,8 @@ export function ChatList(props: { narrow?: boolean }) {
     ],
   );
   const chatStore = useChatStore();
-  const navigate = useNavigate();
+  const { deChat } = useChat();
+  const router = useRouter();
   const isMobileScreen = useMobileScreen();
 
   const onDragEnd: OnDragEndResponder = (result) => {
@@ -150,7 +154,8 @@ export function ChatList(props: { narrow?: boolean }) {
                 index={i}
                 selected={i === selectedIndex}
                 onClick={() => {
-                  navigate(Path.Chat);
+                  // navigate(Path.Chat);
+                  router.push(`/chat/${item.chat_id || ""}`);
                   selectSession(i);
                 }}
                 onDelete={async () => {
@@ -158,6 +163,9 @@ export function ChatList(props: { narrow?: boolean }) {
                     (!props.narrow && !isMobileScreen) ||
                     (await showConfirm(Locale.Home.DeleteChat))
                   ) {
+                    if (item.chat_id) {
+                      deChat(item.chat_id);
+                    }
                     chatStore.deleteSession(i);
                   }
                 }}

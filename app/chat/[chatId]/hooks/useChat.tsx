@@ -23,17 +23,14 @@ export const useChat = () => {
   // const { track } = useEventTracking();
 
   const params = useParams();
-  const [chatId, setChatId] = useState<string | undefined>(
-    params?.chatId as string | undefined,
-  );
+  const [chatId, setChatId] = useState<string>(params?.chatId as string);
   // const { isOnboarding } = useOnboarding();
   // const { trackOnboardingEvent } = useOnboardingTracker();
-  const [generatingAnswer, setGeneratingAnswer] = useState(false);
   const router = useRouter();
   const { messages } = useChatContext();
   // const { currentBrain, currentPromptId, currentBrainId } = useBrainContext();
   const { toast } = useToast();
-  const { createChat } = useChatApi();
+  const { createChat, updateChat, deleteChat } = useChatApi();
 
   const modelConfig = {
     ...useAppConfig.getState().modelConfig,
@@ -49,6 +46,54 @@ export const useChat = () => {
 
   const { addStreamQuestion } = useQuestion();
 
+  const addNewChat = async (question: string) => {
+    let currentChatId = chatId;
+    try {
+      if (currentChatId === undefined) {
+        const chat = await createChat(question);
+        currentChatId = chat.chat_id;
+        setChatId(currentChatId);
+        router.push(`/chat/${currentChatId}`);
+      }
+    } catch (error) {
+      console.error({ error });
+      toast({
+        variant: "destructive",
+        description: "error_occurred",
+      });
+    }
+    return currentChatId;
+  };
+
+  const deChat = async (chatId: string) => {
+    try {
+      const chat = await deleteChat(chatId);
+      router.push(`/chat`);
+    } catch (error) {
+      console.error({ error });
+
+      toast({
+        variant: "destructive",
+        description: "error_occurred",
+      });
+    } finally {
+    }
+  };
+
+  const updateChatName = async (chatId: string, chat_name: string) => {
+    try {
+      const chat = await updateChat(chatId, { chat_name: chat_name });
+    } catch (error) {
+      console.error({ error });
+
+      toast({
+        variant: "destructive",
+        description: "error_occurred",
+      });
+    } finally {
+    }
+  };
+
   const addQuestion = async (question: string, callback?: () => void) => {
     if (question === "") {
       toast({
@@ -60,8 +105,6 @@ export const useChat = () => {
     }
 
     try {
-      setGeneratingAnswer(true);
-
       let currentChatId = chatId;
 
       //if chatId is not set, create a new chat. Chat name is from the first question
@@ -112,14 +155,15 @@ export const useChat = () => {
         description: "error_occurred",
       });
     } finally {
-      setGeneratingAnswer(false);
     }
   };
 
   return {
     messages,
     addQuestion,
-    generatingAnswer,
     chatId,
+    addNewChat,
+    updateChatName,
+    deChat,
   };
 };

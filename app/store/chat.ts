@@ -56,6 +56,7 @@ export interface ChatSession {
   lastUpdate: number;
   lastSummarizeIndex: number;
   clearContextIndex?: number;
+  chat_id: string;
 
   mask: Mask;
 }
@@ -79,6 +80,7 @@ function createEmptySession(): ChatSession {
     },
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
+    chat_id: "",
 
     mask: createEmptyMask(),
   };
@@ -201,6 +203,7 @@ export const useChatStore = createPersistStore(
       },
 
       newSession(mask?: Mask) {
+        const currentSession = get().currentSession();
         const session = createEmptySession();
 
         if (mask) {
@@ -217,10 +220,16 @@ export const useChatStore = createPersistStore(
           session.topic = mask.name;
         }
 
-        set((state) => ({
-          currentSessionIndex: 0,
-          sessions: [session].concat(state.sessions),
-        }));
+        if (currentSession.messages.length > 0) {
+          set((state) => ({
+            currentSessionIndex: 0,
+            sessions: [session].concat(state.sessions),
+          }));
+        }
+        // set((state) => ({
+        //   currentSessionIndex: 0,
+        //   sessions: [session].concat(state.sessions),
+        // }));
       },
 
       nextSession(delta: number) {
@@ -271,6 +280,7 @@ export const useChatStore = createPersistStore(
           },
           5000,
         );
+        // return chat_id for supabase delete
       },
 
       currentSession() {
