@@ -20,6 +20,8 @@ export const ChatProvider = ({
   const [sourcesMessageIndex, setSourcesMessageIndex] = useState<
     number | undefined
   >(undefined);
+  const [chatId,setChatId] = useState<string>("" as string);
+  const [homeworkId,setHomeworkId] = useState<string>("" as string);
 
   const updateStreamingHistory = (streamedChat: ChatMessage): void => {
     setMessages((prevHistory: ChatMessage[]) => {
@@ -58,6 +60,10 @@ export const ChatProvider = ({
         setNotifications,
         sourcesMessageIndex,
         setSourcesMessageIndex,
+        chatId,
+        setChatId,
+        homeworkId,
+        setHomeworkId,
       }}
     >
       {children}

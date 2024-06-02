@@ -21,4 +21,8 @@ export type ChatContextProps = {
   removeMessage: (id: string) => void;
   sourcesMessageIndex: number | undefined;
   setSourcesMessageIndex: (index: number | undefined) => void;
+  chatId: string;
+  setChatId: (chatId: string) => void;
+  homeworkId: string;
+  setHomeworkId: (homeworkId: string) => void;
 };

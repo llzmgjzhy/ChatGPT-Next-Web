@@ -18,6 +18,7 @@ import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
 import { useQuestion } from "./useQuestion";
 
 import { ChatQuestion } from "../types";
+import { MultimodalContent } from "@/app/client/api";
 
 export const useChat = () => {
   // const { track } = useEventTracking();
@@ -30,7 +31,8 @@ export const useChat = () => {
   const { messages } = useChatContext();
   // const { currentBrain, currentPromptId, currentBrainId } = useBrainContext();
   const { toast } = useToast();
-  const { createChat, updateChat, deleteChat } = useChatApi();
+  const { createChat, updateChat, deleteChat, addQuestionAndAnswer } =
+    useChatApi();
 
   const modelConfig = {
     ...useAppConfig.getState().modelConfig,
@@ -92,6 +94,28 @@ export const useChat = () => {
       });
     } finally {
     }
+  };
+
+  const addQuestionAnswer = async (
+    chatId: string,
+    question: string | MultimodalContent[],
+    answer: string | MultimodalContent[],
+  ) => {
+    let messageId = undefined;
+    try {
+      const chat = await addQuestionAndAnswer(chatId, {
+        question: question,
+        answer: answer,
+      });
+      messageId = chat.message_id;
+    } catch (error) {
+      console.error({ error });
+      toast({
+        variant: "destructive",
+        description: "error_occurred",
+      });
+    }
+    return messageId;
   };
 
   const addQuestion = async (question: string, callback?: () => void) => {
@@ -165,5 +189,6 @@ export const useChat = () => {
     addNewChat,
     updateChatName,
     deChat,
+    addQuestionAnswer,
   };
 };

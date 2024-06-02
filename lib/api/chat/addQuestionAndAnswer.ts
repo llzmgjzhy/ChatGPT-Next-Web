@@ -1,21 +1,24 @@
 import { AxiosInstance } from "axios";
 
 import { ChatMessage } from "@/app/chat/[chatId]/types";
+import { MultimodalContent } from "@/app/client/api";
 
 export type QuestionAndAnwser = {
-  question: string;
-  answer: string;
+  question: string | MultimodalContent[];
+  answer: string | MultimodalContent[];
 };
 
 export const addQuestionAndAnswer = async (
   chatId: string,
   questionAndAnswer: QuestionAndAnwser,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatMessage> => {
-  const response = await axiosInstance.post<ChatMessage>(
-    `/chat/${chatId}/question/answer`,
-    questionAndAnswer
-  );
+  const response = (
+    await axiosInstance.post<ChatMessage>(
+      `/chat/${chatId}/question/answer`,
+      questionAndAnswer,
+    )
+  ).data;
 
-  return response.data;
+  return response;
 };

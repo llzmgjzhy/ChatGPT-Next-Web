@@ -21,7 +21,6 @@ import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { useRouter } from "next/navigation";
-import { it } from "node:test";
 
 export function ChatItem(props: {
   onClick?: () => void;

@@ -101,7 +101,8 @@ import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
-import { useAxios } from "@/lib/hooks";
+import { useParams, useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -764,7 +765,19 @@ function _Chat() {
     }
   };
 
-  const { addNewChat, updateChatName } = useChat();
+  const { addNewChat, updateChatName, addQuestionAnswer } = useChat();
+
+  const params = useParams();
+  const [chaPageId, setChatPageId] = useState<string>(params?.chatId as string);
+  const router = useRouter();
+
+  // redirect from login page,if the session.chat_id is not undified,redirect url to chat page
+  useEffect(() => {
+    if (session.chat_id && chaPageId !== session.chat_id) {
+      router.push(`/chat/${session.chat_id}`);
+      setChatPageId(session.chat_id);
+    }
+  }, []);
 
   // if session.topic change,update supabase chat name
   useEffect(() => {
@@ -773,6 +786,39 @@ function _Chat() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.chat_id, session.topic]);
+
+  // monitor session.messages change,if there is new message,storage it to supabase
+  useEffect(() => {
+    if (
+      session.messages.length > 0 &&
+      session.messages[session.messages.length - 1].streaming === false &&
+      isLoading === false
+    ) {
+      // Code to execute if streaming is false
+      const checkedMessages = session.messages.filter((m) => !m.mId);
+      console.log(checkedMessages);
+      if (checkedMessages.length > 0) {
+        checkedMessages.forEach((message, index) => {
+          if (index % 2 === 0) {
+            const userMessage = message.content;
+            const botMessage = checkedMessages[index + 1]?.content;
+            addQuestionAnswer(session.chat_id, userMessage, botMessage).then(
+              (messageId) => {
+                session.messages[session.messages.indexOf(message)].mId =
+                  messageId;
+                if (checkedMessages[index + 1]) {
+                  session.messages[
+                    session.messages.indexOf(checkedMessages[index + 1])
+                  ].mId = messageId;
+                }
+              },
+            );
+          }
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.messages, isLoading]);
 
   const doSubmit = (userInput: string) => {
     if (userInput.trim() === "") return;
@@ -865,7 +911,7 @@ function _Chat() {
       e.preventDefault();
       return;
     }
-    if (shouldSubmit(e) && promptHints.length === 0) {
+    if (shouldSubmit(e) && promptHints.length === 0 && !isLoading) {
       doSubmit(userInput);
       e.preventDefault();
     }
@@ -1565,6 +1611,7 @@ function _Chat() {
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}
+            disabled={isLoading}
           />
         </label>
       </div>

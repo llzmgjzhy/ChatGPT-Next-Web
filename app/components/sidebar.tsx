@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 
 import styles from "@/app/components/home.module.scss";
 
@@ -194,7 +194,8 @@ export function SideBar(props: { className?: string }) {
             //     navigate(Path.Masks, { state: { fromHome: true } });
             //   }
             // }
-            navigate(Path.Chat, { state: { fromHome: true } })
+            // navigate(Path.Chat, { state: { fromHome: true } })
+            router.push("/chat")
           }
           shadow
         />
