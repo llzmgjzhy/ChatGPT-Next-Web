@@ -791,12 +791,10 @@ function _Chat() {
   useEffect(() => {
     if (
       session.messages.length > 0 &&
-      session.messages[session.messages.length - 1].streaming === false &&
-      isLoading === false
+      !session.messages[session.messages.length - 1].streaming &&
+      !isLoading
     ) {
-      // Code to execute if streaming is false
       const checkedMessages = session.messages.filter((m) => !m.mId);
-      console.log(checkedMessages);
       if (checkedMessages.length > 0) {
         checkedMessages.forEach((message, index) => {
           if (index % 2 === 0) {
@@ -811,6 +809,9 @@ function _Chat() {
                     session.messages.indexOf(checkedMessages[index + 1])
                   ].mId = messageId;
                 }
+                chatStore.updateCurrentSession((session) => {
+                  session.messages = session.messages.concat();
+                });
               },
             );
           }
