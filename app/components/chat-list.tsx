@@ -21,6 +21,7 @@ import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { useRouter } from "next/navigation";
+import { useChatsList } from "@/app/chat/[chatId]/hooks/useChatsList";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -113,6 +114,7 @@ export function ChatList(props: { narrow?: boolean }) {
       state.moveSession,
     ],
   );
+  useChatsList();
   const chatStore = useChatStore();
   const { deChat } = useChat();
   const router = useRouter();
@@ -165,7 +167,8 @@ export function ChatList(props: { narrow?: boolean }) {
                     if (item.chat_id) {
                       deChat(item.chat_id);
                     }
-                    chatStore.deleteSession(i);
+                    let chat_id = chatStore.deleteSession(i);
+                    router.push(`/chat/${chat_id || ""}`);
                   }
                 }}
                 narrow={props.narrow}

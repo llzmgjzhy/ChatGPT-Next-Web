@@ -10,6 +10,7 @@ import { useMobileScreen } from "@/app/utils";
 import { getLang } from "@/app/locales";
 import { ChatsProvider } from "@/lib/context/ChatsProvider";
 import { ChatProvider } from "@/lib/context";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const App = ({ children }: PropsWithChildren): JSX.Element => {
   const config = useAppConfig();
@@ -35,14 +36,18 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
   );
 };
 
+const queryClient = new QueryClient();
+
 const AppWithQueryClient = ({ children }: PropsWithChildren): JSX.Element => {
   return (
     <>
-      <ChatsProvider>
-        <ChatProvider>
-          <App>{children}</App>
-        </ChatProvider>
-      </ChatsProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChatsProvider>
+          <ChatProvider>
+            <App>{children}</App>
+          </ChatProvider>
+        </ChatsProvider>
+      </QueryClientProvider>
     </>
   );
 };

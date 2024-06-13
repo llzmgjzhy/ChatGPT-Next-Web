@@ -21,6 +21,7 @@ import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
+import { ChatMessage as ChatMessageSupabase } from "@/app/chat/[chatId]/types";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -58,8 +59,16 @@ export interface ChatSession {
   lastSummarizeIndex: number;
   clearContextIndex?: number;
   chat_id: string;
+  user_id: string;
 
   mask: Mask;
+}
+
+export interface SupabaseSession {
+  chat_name: string;
+  creation_time: string;
+  chat_id: string;
+  user_id: string;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -82,6 +91,7 @@ function createEmptySession(): ChatSession {
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
     chat_id: "",
+    user_id: "",
 
     mask: createEmptyMask(),
   };
@@ -227,10 +237,46 @@ export const useChatStore = createPersistStore(
             sessions: [session].concat(state.sessions),
           }));
         }
-        // set((state) => ({
-        //   currentSessionIndex: 0,
-        //   sessions: [session].concat(state.sessions),
-        // }));
+        set((state) => ({
+          currentSessionIndex: 0,
+          sessions: [session].concat(state.sessions),
+        }));
+      },
+
+      addSupabaseSessions(chatSession: SupabaseSession) {
+        const session = createEmptySession();
+        session.topic = chatSession.chat_name;
+        session.chat_id = chatSession.chat_id;
+        session.user_id = chatSession.user_id;
+        set((state) => ({
+          sessions: state.sessions.concat(session),
+        }));
+      },
+
+      addMessagesFromSupabase(messages: ChatMessageSupabase) {
+        get().updateCurrentSession((session) => {
+          session.messages = [];
+          session.memoryPrompt = "";
+        });
+        const userMessages = createMessage({
+          role: "user",
+          content: messages.user_message,
+          date: messages.message_time,
+          mId: messages.chat_id,
+        });
+        const assistantMessages = createMessage({
+          role: "assistant",
+          content: messages.assistant,
+          date: messages.message_time,
+          mId: messages.chat_id,
+          streaming: false,
+        });
+        get().updateCurrentSession((session) => {
+          session.messages = session.messages.concat([
+            userMessages,
+            assistantMessages,
+          ]);
+        });
       },
 
       nextSession(delta: number) {
@@ -281,7 +327,12 @@ export const useChatStore = createPersistStore(
           },
           5000,
         );
+
+        const nowSession = get().currentSession();
         // return chat_id for supabase delete
+        if (nowSession.chat_id) {
+          return nowSession.chat_id;
+        }
       },
 
       currentSession() {

@@ -29,6 +29,7 @@
     "@svgr/webpack": "^6.5.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
+    "@tanstack/react-query": "^5.45.0",
     "@types/d3-scale-chromatic": "^3.0.3",
     "@types/d3-time": "^3.0.3",
     "@types/estree": "^1.0.5",
