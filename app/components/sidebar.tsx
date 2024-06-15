@@ -21,8 +21,6 @@ import Locale from "@/app/locales";
 
 import { useAppConfig, useChatStore } from "@/app/store";
 
-import { useLocation } from "react-router-dom";
-
 import {
   DEFAULT_SIDEBAR_WIDTH,
   MAX_SIDEBAR_WIDTH,
@@ -32,6 +30,7 @@ import {
   REPO_URL,
 } from "@/app/constant";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "@/app/utils";
@@ -140,10 +139,11 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
-  const location = useLocation();
-  const isHomeWork = location.pathname === Path.HomeWork;
+  const [isChat, setIsChat] = useState<boolean>(false);
+  const [isHomework, setIsHomework] = useState<boolean>(false);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
@@ -154,6 +154,11 @@ export function SideBar(props: { className?: string }) {
     () => isIOS() && isMobileScreen,
     [isMobileScreen],
   );
+
+  useEffect(() => {
+    setIsChat(pathname.includes("chat"));
+    setIsHomework(pathname.includes("homework"));
+  }, [pathname]);
 
   useHotKey();
 
@@ -175,8 +180,6 @@ export function SideBar(props: { className?: string }) {
           chat with a medical AI
         </div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
-          {/* <MedImindIcon />
-           */}
           <MedImindLogo size={50} />
         </div>
       </div>
@@ -185,26 +188,20 @@ export function SideBar(props: { className?: string }) {
         <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.ChatBot.Name}
-          className={styles["sidebar-bar-button"]}
-          onClick={() =>
-            //   {
-            //   if (config.dontShowMaskSplashScreen !== true) {
-            //     navigate(Path.NewChat, { state: { fromHome: true } });
-            //   } else {
-            //     navigate(Path.Masks, { state: { fromHome: true } });
-            //   }
-            // }
-            // navigate(Path.Chat, { state: { fromHome: true } })
-            router.push("/chat")
-          }
+          className={`${styles["sidebar-bar-button"]} ${
+            isChat ? styles["sidebar-bar-button-selected"] : ""
+          }`}
+          onClick={() => router.push("/chat")}
           shadow
         />
         <IconButton
           icon={<PluginIcon />}
           text={shouldNarrow ? undefined : Locale.HomeWork.Name}
-          className={styles["sidebar-bar-button"]}
+          className={`${styles["sidebar-bar-button"]} ${
+            isHomework ? styles["sidebar-bar-button-selected"] : ""
+          }`}
           onClick={() => {
-            navigate(Path.HomeWork, { state: { fromHome: true } });
+            router.push("/homework");
           }}
           shadow
         />
@@ -251,7 +248,7 @@ export function SideBar(props: { className?: string }) {
             </a>
           </div> */}
         </div>
-        {!isHomeWork && (
+        {!isHomework && (
           <div className={styles["sidebar-tail-bar"]}>
             <IconButton
               icon={<AddIcon />}

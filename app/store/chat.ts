@@ -254,10 +254,6 @@ export const useChatStore = createPersistStore(
       },
 
       addMessagesFromSupabase(messages: ChatMessageSupabase) {
-        get().updateCurrentSession((session) => {
-          session.messages = [];
-          session.memoryPrompt = "";
-        });
         const userMessages = createMessage({
           role: "user",
           content: messages.user_message,

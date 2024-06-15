@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useChatStore } from "@/app/store/chat";
 
 export const useChatsList = () => {
-  const { setAllChats, setIsLoading } = useChatsContext();
+  const { allChats, setAllChats, setIsLoading } = useChatsContext();
   const { toast } = useToast();
   const { getChats } = useChatApi();
   const { session } = useSupabase();
@@ -38,8 +38,11 @@ export const useChatsList = () => {
 
   useEffect(() => {
     setAllChats(chats ?? []);
-    for (const chat of chats ?? []) {
-      chatStore.addSupabaseSessions(chat);
+    if (chats !== allChats) {
+      chatStore.clearSessions();
+      for (const chat of chats ?? []) {
+        chatStore.addSupabaseSessions(chat);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats]);

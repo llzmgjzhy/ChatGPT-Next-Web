@@ -31,6 +31,7 @@ export const useChatNotificationsSync = () => {
         (messagesFromChatItems[0] && messagesFromChatItems[0].assistant !== "")
       ) {
         setMessages(messagesFromChatItems);
+        chatStore.resetSession();
         for (const message of messagesFromChatItems) {
           chatStore.addMessagesFromSupabase(message);
         }

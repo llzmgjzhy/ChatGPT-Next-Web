@@ -167,7 +167,7 @@ export function ChatList(props: { narrow?: boolean }) {
                     if (item.chat_id) {
                       deChat(item.chat_id);
                     }
-                    let chat_id = chatStore.deleteSession(i);
+                    const chat_id = chatStore.deleteSession(i);
                     router.push(`/chat/${chat_id || ""}`);
                   }
                 }}

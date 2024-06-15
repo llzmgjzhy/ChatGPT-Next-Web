@@ -11,12 +11,15 @@ import { getLang } from "@/app/locales";
 import { ChatsProvider } from "@/lib/context/ChatsProvider";
 import { ChatProvider } from "@/lib/context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useSupabase } from "@/lib/context/SupabaseProvider";
 
 const App = ({ children }: PropsWithChildren): JSX.Element => {
   const config = useAppConfig();
   const isMobileScreen = useMobileScreen();
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+  const session = useSupabase();
+
   return (
     <>
       <Router>
@@ -28,8 +31,16 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
             }`
           }
         >
-          <SideBar className={styles["sidebar-show"]} />
-          <div className={styles["window-content"]}> {children}</div>
+          {session.session && <SideBar className={styles["sidebar-show"]} />}
+          <div
+            className={
+              session.session
+                ? styles["window-content"]
+                : "flex justify-center items-center w-full h-full"
+            }
+          >
+            {children}
+          </div>
         </div>
       </Router>
     </>
