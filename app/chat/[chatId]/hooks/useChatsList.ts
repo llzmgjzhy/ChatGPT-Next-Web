@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useChatApi } from "@/lib/api/chat/useChatApi";
 import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
@@ -7,6 +7,7 @@ import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useToast } from "@/components/ui/use-toast";
 
 import { useChatStore } from "@/app/store/chat";
+import { useParams, useRouter } from "next/navigation";
 
 export const useChatsList = () => {
   const { allChats, setAllChats, setIsLoading } = useChatsContext();
@@ -14,6 +15,10 @@ export const useChatsList = () => {
   const { getChats } = useChatApi();
   const { session } = useSupabase();
   const chatStore = useChatStore();
+  const params = useParams();
+  const [chatPageId, setChatPageId] = useState<string>(
+    params?.chatId as string,
+  );
 
   const fetchAllChats = async () => {
     if (session) {

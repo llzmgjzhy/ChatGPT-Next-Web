@@ -106,16 +106,15 @@ export function ChatItem(props: {
 }
 
 export function ChatList(props: { narrow?: boolean }) {
-  const [sessions, selectedIndex, selectSession, moveSession] = useChatStore(
-    (state) => [
+  const [sessions, selectedIndex, selectSession, moveSession, deleteSession] =
+    useChatStore((state) => [
       state.sessions,
       state.currentSessionIndex,
       state.selectSession,
       state.moveSession,
-    ],
-  );
+      state.deleteSession,
+    ]);
   useChatsList();
-  const chatStore = useChatStore();
   const { deChat } = useChat();
   const router = useRouter();
   const isMobileScreen = useMobileScreen();
@@ -167,7 +166,7 @@ export function ChatList(props: { narrow?: boolean }) {
                     if (item.chat_id) {
                       deChat(item.chat_id);
                     }
-                    const chat_id = chatStore.deleteSession(i);
+                    const chat_id = deleteSession(i);
                     router.push(`/chat/${chat_id || ""}`);
                   }
                 }}

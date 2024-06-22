@@ -103,6 +103,7 @@ import { MultimodalContent } from "../client/api";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { useParams, useRouter } from "next/navigation";
 import { set } from "react-hook-form";
+import { useChatNotificationsSync } from "@/app/chat/[chatId]/hooks/useChatNotificationsSync";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -671,6 +672,7 @@ export function DeleteImageButton(props: { deleteImage: () => void }) {
 function _Chat() {
   type RenderMessage = ChatMessage & { preview?: boolean };
 
+  const [selectSession] = useChatStore((state) => [state.selectSession]);
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const config = useAppConfig();
@@ -768,15 +770,31 @@ function _Chat() {
   const { addNewChat, updateChatName, addQuestionAnswer } = useChat();
 
   const params = useParams();
-  const [chaPageId, setChatPageId] = useState<string>(params?.chatId as string);
+  const [chatPageId, setChatPageId] = useState<string>(
+    params?.chatId as string,
+  );
   const router = useRouter();
+
+  // useChatNotificationsSync();
 
   // redirect from login page,if the session.chat_id is not undified,redirect url to chat page
   useEffect(() => {
-    if (session.chat_id && chaPageId !== session.chat_id) {
+    if (session.chat_id && chatPageId !== session.chat_id) {
       router.push(`/chat/${session.chat_id}`);
       setChatPageId(session.chat_id);
+    } else if (
+      chatPageId &&
+      !session.chat_id &&
+      chatStore.currentSessionIndex !== 0
+    ) {
+      chatStore.sessions.map((item, i) => {
+        if (item.chat_id === chatPageId) {
+          selectSession(i);
+        }
+      });
+      router.push(`/chat/${chatPageId}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // if session.topic change,update supabase chat name

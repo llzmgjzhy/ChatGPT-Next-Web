@@ -17,10 +17,9 @@ export const useChatNotificationsSync = () => {
 
   useEffect(() => {
     const fetchHistory = async () => {
-      if (chatId === undefined) {
+      if (chatId === undefined || "") {
         setMessages([]);
         setNotifications([]);
-        chatStore.resetSession();
 
         return;
       }
