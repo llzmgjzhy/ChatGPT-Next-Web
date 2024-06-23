@@ -255,15 +255,10 @@ export function SideBar(props: { className?: string }) {
               text={shouldNarrow ? undefined : Locale.Home.NewChat}
               className={styles["sidebar-tail-bar-button"]}
               onClick={() => {
-                // if (config.dontShowMaskSplashScreen) {
-                //   chatStore.newSession();
-                //   navigate(Path.Chat);
-                // } else {
-                //   navigate(Path.NewChat);
-                // }
-                chatStore.newSession();
-                // navigate(Path.Chat);
-                router.push("/chat");
+                if (chatStore.sessions[0].chat_id !== "") {
+                  chatStore.newSession();
+                  router.push("/chat");
+                }
               }}
               shadow
             />

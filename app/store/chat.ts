@@ -214,7 +214,6 @@ export const useChatStore = createPersistStore(
       },
 
       newSession(mask?: Mask) {
-        const currentSession = get().currentSession();
         const session = createEmptySession();
 
         if (mask) {
@@ -231,12 +230,6 @@ export const useChatStore = createPersistStore(
           session.topic = mask.name;
         }
 
-        if (currentSession.messages.length > 0) {
-          set((state) => ({
-            currentSessionIndex: 0,
-            sessions: [session].concat(state.sessions),
-          }));
-        }
         set((state) => ({
           currentSessionIndex: 0,
           sessions: [session].concat(state.sessions),

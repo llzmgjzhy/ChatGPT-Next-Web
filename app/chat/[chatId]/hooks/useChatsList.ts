@@ -15,10 +15,6 @@ export const useChatsList = () => {
   const { getChats } = useChatApi();
   const { session } = useSupabase();
   const chatStore = useChatStore();
-  const params = useParams();
-  const [chatPageId, setChatPageId] = useState<string>(
-    params?.chatId as string,
-  );
 
   const fetchAllChats = async () => {
     if (session) {
