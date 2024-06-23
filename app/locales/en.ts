@@ -131,6 +131,7 @@ const en: LocaleType = {
     DeleteToast: "Chat Deleted",
     Revert: "Revert",
     Settings: "Setting",
+    NewHomework: "New Homework",
   },
   Settings: {
     Title: "Settings",
@@ -393,7 +394,7 @@ const en: LocaleType = {
   },
   Store: {
     DefaultTopic: "New Conversation",
-    BotHello: "Hello! How can I assist you today?",
+    BotHello: "This assignment is",
     Error: "Something went wrong, please try again later.",
     Prompt: {
       History: (content: string) =>

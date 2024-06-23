@@ -44,7 +44,6 @@ import RobotIcon from "../icons/robot.svg";
 import {
   ChatMessage,
   SubmitKey,
-  useChatStore,
   BOT_HELLO,
   createMessage,
   useAccessStore,
@@ -53,6 +52,8 @@ import {
   DEFAULT_TOPIC,
   ModelType,
 } from "../store";
+
+import { useHomeworkStore as useChatStore } from "../store/homework";
 
 import {
   copyToClipboard,
@@ -100,7 +101,7 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
-import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
+import { useChat } from "@/app/homework/[homeworkId]/hooks/useChat";
 import { useParams, useRouter } from "next/navigation";
 import { set } from "react-hook-form";
 
@@ -774,9 +775,10 @@ function _Chat() {
   // redirect from login page,if the session.chat_id is not undified,redirect url to chat page
   useEffect(() => {
     if (session.chat_id && chaPageId !== session.chat_id) {
-      router.push(`/chat/${session.chat_id}`);
+      router.push(`/homework/${session.chat_id}`);
       setChatPageId(session.chat_id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // if session.topic change,update supabase chat name
@@ -797,24 +799,17 @@ function _Chat() {
       const checkedMessages = session.messages.filter((m) => !m.mId);
       if (checkedMessages.length > 0) {
         checkedMessages.forEach((message, index) => {
-          if (index % 2 === 0) {
-            const userMessage = message.content;
-            const botMessage = checkedMessages[index + 1]?.content;
-            addQuestionAnswer(session.chat_id, userMessage, botMessage).then(
-              (messageId) => {
-                session.messages[session.messages.indexOf(message)].mId =
-                  messageId;
-                if (checkedMessages[index + 1]) {
-                  session.messages[
-                    session.messages.indexOf(checkedMessages[index + 1])
-                  ].mId = messageId;
-                }
-                chatStore.updateCurrentSession((session) => {
-                  session.messages = session.messages.concat();
-                });
-              },
-            );
-          }
+          const userMessage = message.content;
+          const botMessage = "";
+          addQuestionAnswer(session.chat_id, userMessage, botMessage).then(
+            (messageId) => {
+              session.messages[session.messages.indexOf(message)].mId =
+                messageId;
+              chatStore.updateCurrentSession((session) => {
+                session.messages = session.messages.concat();
+              });
+            },
+          );
         });
       }
     }

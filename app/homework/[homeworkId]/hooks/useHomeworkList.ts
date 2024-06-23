@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-import { useChatApi } from "@/lib/api/chat/useChatApi";
+import { useChatApi } from "@/lib/api/homework/useHomeworkApi";
 import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useToast } from "@/components/ui/use-toast";
 
-import { useChatStore } from "@/app/store/chat";
+import { useHomeworkStore as useChatStore } from "@/app/store/homework";
 
 export const useChatsList = () => {
   const { allChats, setAllChats, setIsLoading } = useChatsContext();

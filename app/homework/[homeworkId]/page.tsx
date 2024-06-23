@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 // import { Home } from "../../components/home";
 
 import { getServerSideConfig } from "../../config/server";
-import { Chat } from "@/app/components/chat";
+import { Chat } from "@/app/components/homework";
 import { useState, useEffect } from "react";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { redirectToLogin } from "@/lib/router/redirectToLogin";

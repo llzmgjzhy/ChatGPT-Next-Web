@@ -671,7 +671,6 @@ export function DeleteImageButton(props: { deleteImage: () => void }) {
 function _Chat() {
   type RenderMessage = ChatMessage & { preview?: boolean };
 
-  const [selectSession] = useChatStore((state) => [state.selectSession]);
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
   const config = useAppConfig();

@@ -18,7 +18,7 @@ import {
 } from "./homework";
 
 // TODO: split './chat.ts' into multiple files, per function for example
-export const useHomeworkApi = () => {
+export const useChatApi = () => {
   const { axiosInstance } = useAxios();
 
   return {

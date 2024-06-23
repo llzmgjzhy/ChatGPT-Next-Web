@@ -16,10 +16,12 @@ import DeleteIcon from "@/app/icons/delete.svg";
 import MaskIcon from "@/app/icons/chat.svg";
 import PluginIcon from "@/app/icons/edit.svg";
 import DragIcon from "@/app/icons/drag.svg";
+import { useSupabase } from "@/lib/context/SupabaseProvider";
 
 import Locale from "@/app/locales";
 
 import { useAppConfig, useChatStore } from "@/app/store";
+import { useHomeworkStore } from "@/app/store/homework";
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -39,6 +41,13 @@ import { showConfirm, showToast } from "@/app/components/ui-lib";
 
 const ChatList = dynamic(
   async () => (await import("@/app/components/chat-list")).ChatList,
+  {
+    loading: () => null,
+  },
+);
+
+const HomeworkList = dynamic(
+  async () => (await import("@/app/components/homework-list")).ChatList,
   {
     loading: () => null,
   },
@@ -139,6 +148,7 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
+  const homeworkStore = useHomeworkStore();
   const [isChat, setIsChat] = useState<boolean>(false);
   const [isHomework, setIsHomework] = useState<boolean>(false);
 
@@ -154,6 +164,7 @@ export function SideBar(props: { className?: string }) {
     () => isIOS() && isMobileScreen,
     [isMobileScreen],
   );
+  const { session } = useSupabase();
 
   useEffect(() => {
     setIsChat(pathname.includes("chat"));
@@ -191,7 +202,10 @@ export function SideBar(props: { className?: string }) {
           className={`${styles["sidebar-bar-button"]} ${
             isChat ? styles["sidebar-bar-button-selected"] : ""
           }`}
-          onClick={() => router.push("/chat")}
+          onClick={() => {
+            router.push("/chat");
+            homeworkStore.selectSession(0);
+          }}
           shadow
         />
         <IconButton
@@ -202,6 +216,7 @@ export function SideBar(props: { className?: string }) {
           }`}
           onClick={() => {
             router.push("/homework");
+            chatStore.selectSession(0);
           }}
           shadow
         />
@@ -215,7 +230,8 @@ export function SideBar(props: { className?: string }) {
           }
         }}
       >
-        <ChatList narrow={shouldNarrow} />
+        {isChat && <ChatList narrow={shouldNarrow} />}
+        {isHomework && <HomeworkList narrow={shouldNarrow} />}
       </div>
 
       <div className={styles["sidebar-tail"]}>
@@ -258,6 +274,22 @@ export function SideBar(props: { className?: string }) {
                 if (chatStore.sessions[0].chat_id !== "") {
                   chatStore.newSession();
                   router.push("/chat");
+                }
+              }}
+              shadow
+            />
+          </div>
+        )}
+        {isHomework && session?.user.user_metadata.role === "admin" && (
+          <div className={styles["sidebar-tail-bar"]}>
+            <IconButton
+              icon={<AddIcon />}
+              text={shouldNarrow ? undefined : Locale.Home.NewHomework}
+              className={styles["sidebar-tail-bar-button"]}
+              onClick={() => {
+                if (homeworkStore.sessions[0].chat_id !== "") {
+                  homeworkStore.newSession();
+                  router.push("/homework");
                 }
               }}
               shadow

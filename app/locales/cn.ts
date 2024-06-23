@@ -128,6 +128,7 @@ const cn = {
     DeleteToast: "已删除会话",
     Revert: "撤销",
     Settings: "设置",
+    NewHomework: "新的作业",
   },
   Settings: {
     Title: "设置",
@@ -387,7 +388,7 @@ const cn = {
   },
   Store: {
     DefaultTopic: "新的聊天",
-    BotHello: "有什么可以帮你的吗",
+    BotHello: "本次作业为：",
     Error: "出错了，稍后重试吧",
     Prompt: {
       History: (content: string) => "这是历史聊天总结作为前情提要：" + content,

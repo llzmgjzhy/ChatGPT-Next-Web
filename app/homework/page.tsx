@@ -1,4 +1,4 @@
 "use client";
-import HomeworkPage from "./[id]/page";
+import HomeworkPage from "./[homeworkId]/page";
 
 export default HomeworkPage;
