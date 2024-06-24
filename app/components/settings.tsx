@@ -73,6 +73,7 @@ import { nanoid } from "nanoid";
 import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
 import { useLogoutModal } from "../../lib/hooks/useLogoutModal";
+import { useRouter } from "next/navigation";
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -585,6 +586,7 @@ export function Settings() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const config = useAppConfig();
   const updateConfig = config.update;
+  const router = useRouter();
 
   const updateStore = useUpdateStore();
   // const [checkingUpdate, setCheckingUpdate] = useState(false);
@@ -692,7 +694,7 @@ export function Settings() {
           <div className="window-action-button">
             <IconButton
               icon={<CloseIcon />}
-              onClick={() => navigate(Path.Home)}
+              onClick={() => router.push(`/chat/`)}
               bordered
             />
           </div>
