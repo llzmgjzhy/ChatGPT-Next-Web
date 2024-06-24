@@ -73,7 +73,7 @@ export const useUpdateStore = createPersistStore(
       const versionType = get().versionType;
       let version =
         versionType === "date"
-          ? getClientConfig()?.commitDate
+          ? getClientConfig()?.version
           : getClientConfig()?.version;
 
       set(() => ({ version }));

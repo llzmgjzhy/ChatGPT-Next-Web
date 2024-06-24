@@ -5,7 +5,7 @@ import {
   ChatItem,
   ChatMessage,
   ChatQuestion,
-} from "@/app/chat/[chatId]/types";
+} from "@/app/homework/[homeworkId]/types";
 
 export type ChatUpdatableProperties = {
   chat_name?: string;

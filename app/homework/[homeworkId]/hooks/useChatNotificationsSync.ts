@@ -5,7 +5,7 @@ import { useChatApi } from "@/lib/api/homework/useHomeworkApi";
 
 import { useChatContext } from "@/lib/context";
 
-import { getMessagesFromChatItems } from "@/app/chat/[chatId]/utils/getMessagesFromChatItems";
+import { getMessagesFromChatItems } from "@/app/homework/[homeworkId]/utils/getMessagesFromChatItems";
 import { useHomeworkStore as useChatStore } from "@/app/store/homework";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 

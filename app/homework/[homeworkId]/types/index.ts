@@ -15,6 +15,8 @@ export type ChatMessage = {
   message_id: string;
   user_message: string;
   assistant: string;
+  user_id: string;
+  is_checked: boolean;
   message_time: string;
   prompt_title?: string;
   brain_name?: string;
