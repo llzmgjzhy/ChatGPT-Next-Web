@@ -3,7 +3,7 @@ services:
   chatgpt-next-web:
     # profiles: ["no-proxy"]
     container_name: MedImind
-    image: chatgpt-web:git
+    image: chatgpt-web:homework
     pull_policy: never
     volumes:
       - ./.git:/app/.git
