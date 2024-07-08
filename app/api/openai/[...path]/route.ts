@@ -44,7 +44,6 @@ async function handle(
       },
     );
   }
-
   const authResult = auth(req, ModelProvider.GPT);
   if (authResult.error) {
     return NextResponse.json(authResult, {
@@ -63,6 +62,7 @@ async function handle(
         status: response.status,
       });
     }
+    console.log("[OpenAI Route] params ", params);
 
     return response;
   } catch (e) {
