@@ -6,10 +6,17 @@ import { Analytics } from "@vercel/analytics/react";
 
 import { getServerSideConfig } from "../../config/server";
 import { Chat } from "@/app/components/chat";
+import { PdfBook } from "@/app/components/pdf-preview";
 import { useState, useEffect } from "react";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { redirectToLogin } from "@/lib/router/redirectToLogin";
 import { useChatNotificationsSync } from "./hooks/useChatNotificationsSync";
+import "./page.scss";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 
 const serverConfig = getServerSideConfig();
 
@@ -25,12 +32,20 @@ export default function ChatPage() {
 
   return (
     <>
-      <Chat />
-      {serverConfig?.isVercel && (
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel>
+          <Chat />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel>
+          <PdfBook />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+      {/* {serverConfig?.isVercel && (
         <>
           <Analytics />
         </>
-      )}
+      )} */}
     </>
   );
 }
