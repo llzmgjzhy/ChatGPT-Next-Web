@@ -3,12 +3,12 @@
   flex-direction: column;
   position: relative;
   height: 100%;
-  background-color: aliceblue;
-  border-radius: 15px;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -o-border-radius: 15px;
+  background-color: var(--second);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
 }
 
 .FilePreview input,
@@ -57,7 +57,7 @@ input[type="number"] {
   // align-items: center;
   margin: 10px 0;
   padding: 10px;
-  // height: 100%;
+  height: 100%;
   overflow: auto;
 }
 
@@ -94,12 +94,14 @@ input[type="number"] {
 }
 
 .Test__container__content__controls {
-  // text-align: center;
+  text-align: center;
+  align-content: center;
   display: flex;
   justify-content: center;
+  bottom: 5px;
   .Test__container__content__controls__button {
-    margin: 0 10px;
-    background-color: rgb(128, 126, 244);
+    margin: 0 5px;
+    // background-color: #9be2ff;
   }
   padding: 5px;
 }

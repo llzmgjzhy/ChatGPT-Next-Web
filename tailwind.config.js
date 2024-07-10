@@ -39,7 +39,7 @@ module.exports = {
         tertiary: "#F6F4FF",
         accent: "#13ABBA",
         zinc: "#18181B",
-        highlight: "#FAFAFA",
+        highlight: "#f3f3f3",
         "hover-zinc": "#2F2F31",
         "accent-hover": "#008491",
         "chat-bg-gray": "#D9D9D9",
