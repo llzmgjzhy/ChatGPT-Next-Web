@@ -74,7 +74,7 @@ export interface SupabaseSession {
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
 export const BOT_HELLO: ChatMessage = createMessage({
   role: "assistant",
-  content: Locale.Store.BotHello,
+  content: Locale.Store.HomeworkHello,
 });
 
 function createEmptySession(): ChatSession {

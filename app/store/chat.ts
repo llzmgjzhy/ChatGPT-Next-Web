@@ -583,6 +583,12 @@ export const useChatStore = createPersistStore(
         });
       },
 
+      resetSessionChatid(chatId: string) {
+        get().updateCurrentSession((session) => {
+          session.chat_id = chatId;
+        });
+      },
+
       summarizeSession() {
         const config = useAppConfig.getState();
         const session = get().currentSession();

@@ -2,8 +2,6 @@
 
 import { Analytics } from "@vercel/analytics/react";
 
-// import { Home } from "../../components/home";
-
 import { getServerSideConfig } from "../../config/server";
 import { Chat } from "@/app/components/chat";
 import { PdfBook } from "@/app/components/pdf-preview";
@@ -11,7 +9,6 @@ import { useState, useEffect } from "react";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { redirectToLogin } from "@/lib/router/redirectToLogin";
 import { useChatNotificationsSync } from "./hooks/useChatNotificationsSync";
-import "./page.scss";
 import {
   ResizableHandle,
   ResizablePanel,

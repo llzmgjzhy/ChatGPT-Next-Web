@@ -70,7 +70,7 @@ export const useChat = () => {
   const deChat = async (chatId: string) => {
     try {
       const chat = await deleteChat(chatId);
-      router.push(`/chat`);
+      router.push(`/chat/${""}`);
     } catch (error) {
       console.error({ error });
 

@@ -74,6 +74,8 @@ import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
 import { useLogoutModal } from "../../lib/hooks/useLogoutModal";
 import { useRouter } from "next/navigation";
+import { useSupabase } from "@/lib/context/SupabaseProvider";
+import { redirectToLogin } from "@/lib/router/redirectToLogin";
 
 function EditPromptModal(props: { id: string; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -587,6 +589,14 @@ export function Settings() {
   const config = useAppConfig();
   const updateConfig = config.update;
   const router = useRouter();
+  const { session } = useSupabase();
+  const chatStore = useChatStore();
+
+  useEffect(() => {
+    if (session?.user == undefined) {
+      redirectToLogin();
+    }
+  }, [session?.user]);
 
   const updateStore = useUpdateStore();
   // const [checkingUpdate, setCheckingUpdate] = useState(false);
@@ -694,7 +704,10 @@ export function Settings() {
           <div className="window-action-button">
             <IconButton
               icon={<CloseIcon />}
-              onClick={() => router.push(`/chat/`)}
+              onClick={() => {
+                chatStore.selectSession(0);
+                router.push(`/chat/${""}`);
+              }}
               bordered
             />
           </div>
@@ -836,7 +849,7 @@ export function Settings() {
             ></input>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.SendPreviewBubble.Title}
             subTitle={Locale.Settings.SendPreviewBubble.SubTitle}
           >
@@ -850,11 +863,11 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
-        <SyncItems />
-
+        {/* <SyncItems /> */}
+        {/* 
         <List>
           <ListItem
             title={Locale.Settings.Mask.Splash.Title}
@@ -888,8 +901,8 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-        </List>
-
+        </List> */}
+        {/* 
         <List>
           <ListItem
             title={Locale.Settings.Prompt.Disable.Title}
@@ -920,8 +933,8 @@ export function Settings() {
               onClick={() => setShowPromptModal(true)}
             />
           </ListItem>
-        </List>
-
+        </List> */}
+        {/* 
         <List id={SlotID.CustomModel}>
           {showAccessCode && (
             <ListItem
@@ -1256,7 +1269,7 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-        </List>
+        </List> */}
 
         <List>
           <ModelConfigList

@@ -287,7 +287,7 @@ export function Select(
       <select className={styles["select-with-icon-select"]} {...otherProps}>
         {children}
       </select>
-      <DownIcon className={styles["select-with-icon-icon"]} />
+      {/* <DownIcon className={styles["select-with-icon-icon"]} /> */}
     </div>
   );
 }

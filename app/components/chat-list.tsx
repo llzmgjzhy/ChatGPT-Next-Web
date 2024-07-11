@@ -189,8 +189,8 @@ export function ChatList(props: { narrow?: boolean }) {
                 selected={i === selectedIndex}
                 onClick={() => {
                   // navigate(Path.Chat);
-                  router.push(`/chat/${item.chat_id || ""}`);
                   selectSession(i);
+                  router.push(`/chat/${item.chat_id || ""}`);
                 }}
                 onDelete={async () => {
                   if (

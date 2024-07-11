@@ -203,7 +203,8 @@ export function SideBar(props: { className?: string }) {
             isChat ? styles["sidebar-bar-button-selected"] : ""
           }`}
           onClick={() => {
-            router.push("/chat");
+            router.push(`/chat/${""}`);
+            // if back to chat,the show is the first one instead of the original one
             homeworkStore.selectSession(0);
           }}
           shadow
@@ -215,7 +216,8 @@ export function SideBar(props: { className?: string }) {
             isHomework ? styles["sidebar-bar-button-selected"] : ""
           }`}
           onClick={() => {
-            router.push("/homework");
+            router.push(`/homework/${""}`);
+            // // if back to chat,the show is the first one instead of the original one
             chatStore.selectSession(0);
           }}
           shadow
@@ -252,7 +254,7 @@ export function SideBar(props: { className?: string }) {
               icon={<SettingsIcon />}
               text={shouldNarrow ? undefined : Locale.Home.Settings}
               onClick={() => {
-                router.push("/settings");
+                router.push(`/settings/${""}`);
               }}
               shadow
             />
@@ -273,7 +275,10 @@ export function SideBar(props: { className?: string }) {
               onClick={() => {
                 if (chatStore.sessions[0].chat_id !== "") {
                   chatStore.newSession();
-                  router.push("/chat");
+                  router.push(`/chat/${""}`);
+                } else {
+                  chatStore.selectSession(0);
+                  router.push(`/chat/${""}`);
                 }
               }}
               shadow
@@ -289,7 +294,7 @@ export function SideBar(props: { className?: string }) {
               onClick={() => {
                 if (homeworkStore.sessions[0].chat_id !== "") {
                   homeworkStore.newSession();
-                  router.push("/homework");
+                  router.push(`/homework/${""}`);
                 }
               }}
               shadow

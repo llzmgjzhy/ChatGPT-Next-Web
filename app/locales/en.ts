@@ -394,7 +394,8 @@ const en: LocaleType = {
   },
   Store: {
     DefaultTopic: "New Conversation",
-    BotHello: "This assignment is",
+    BotHello: "What can I do for you?",
+    HomeworkHello: "This is a homework assignment",
     Error: "Something went wrong, please try again later.",
     Prompt: {
       History: (content: string) =>

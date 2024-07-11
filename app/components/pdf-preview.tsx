@@ -40,7 +40,9 @@ const maxWidth = 1500;
 type PDFFile = string | File | null;
 
 export function PdfBook() {
-  const [file, setFile] = useState<PDFFile>("./lesson_book.pdf");
+  const [file, setFile] = useState<PDFFile>(
+    "http://47.121.195.173:3000/reference_book.pdf",
+  );
   const [numPages, setNumPages] = useState<number>();
   const [PageNumber, setPageNumber] = useState<number>(1);
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
@@ -170,8 +172,12 @@ export function PdfBook() {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>选择文档</SelectLabel>
-              <SelectItem value="./lesson_book.pdf">课本</SelectItem>
-              <SelectItem value="./reference_book.pdf">参考资料</SelectItem>
+              <SelectItem value="http://47.121.195.173:3000/lesson_book.pdf">
+                课本
+              </SelectItem>
+              <SelectItem value="http://47.121.195.173:3000/reference_book.pdf">
+                参考资料
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

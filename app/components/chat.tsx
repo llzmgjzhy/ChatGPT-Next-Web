@@ -101,8 +101,6 @@ import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
-import { useParams, useRouter } from "next/navigation";
-import { useChatNotificationsSync } from "@/app/chat/[chatId]/hooks/useChatNotificationsSync";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
