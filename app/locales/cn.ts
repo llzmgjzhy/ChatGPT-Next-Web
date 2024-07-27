@@ -511,6 +511,16 @@ const cn = {
     Topic: "主题",
     Time: "时间",
   },
+  querySelect: {
+    major: "专业",
+    courseSelect: "选课",
+    minor: "辅修",
+    research: "研究",
+    job: "就业",
+    postGraduate: "保研",
+    course: "课程",
+    title: "选择询问方向",
+  },
 };
 
 type DeepPartial<T> = T extends object

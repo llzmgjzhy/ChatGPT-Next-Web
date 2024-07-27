@@ -518,6 +518,16 @@ const en: LocaleType = {
     Code: "Detected access code from url, confirm to apply? ",
     Settings: "Detected settings from url, confirm to apply?",
   },
+  querySelect: {
+    major: "major",
+    courseSelect: "course select",
+    minor: "minor",
+    research: "research",
+    job: "job",
+    postGraduate: "postgraduate recommendation",
+    course: "course",
+    title: "Select inquiry direction.",
+  },
 };
 
 export default en;

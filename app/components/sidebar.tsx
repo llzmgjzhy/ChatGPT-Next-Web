@@ -38,6 +38,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "@/app/utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "@/app/components/ui-lib";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { set } from "react-hook-form";
 
 const ChatList = dynamic(
   async () => (await import("@/app/components/chat-list")).ChatList,
@@ -151,6 +168,7 @@ export function SideBar(props: { className?: string }) {
   const homeworkStore = useHomeworkStore();
   const [isChat, setIsChat] = useState<boolean>(false);
   const [isHomework, setIsHomework] = useState<boolean>(false);
+  const [querySelect, setQuerySelect] = useState<string>("major");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -165,6 +183,10 @@ export function SideBar(props: { className?: string }) {
     [isMobileScreen],
   );
   const { session } = useSupabase();
+
+  function onSelectChange(event: string) {
+    setQuerySelect(event);
+  }
 
   useEffect(() => {
     setIsChat(pathname.includes("chat"));
@@ -195,7 +217,7 @@ export function SideBar(props: { className?: string }) {
         </div>
       </div>
 
-      <div className={styles["sidebar-header-bar"]}>
+      {/* <div className={styles["sidebar-header-bar"]}>
         <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.ChatBot.Name}
@@ -222,7 +244,60 @@ export function SideBar(props: { className?: string }) {
           }}
           shadow
         />
-      </div>
+      </div> */}
+
+      {!shouldNarrow && (
+        <Card className="overflow-hidden mb-4">
+          <CardHeader>
+            <CardTitle>{Locale.querySelect.title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form>
+              <div className="grid w-full items-center gap-1 overflow-hidden">
+                <div className="flex flex-col space-y-1.5">
+                  <Select
+                    onValueChange={onSelectChange}
+                    defaultValue={querySelect}
+                  >
+                    <SelectTrigger id="medimind">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="major">
+                        {Locale.querySelect.major}
+                      </SelectItem>
+                      <SelectItem value="course-select">
+                        {Locale.querySelect.courseSelect}
+                      </SelectItem>
+                      <SelectItem value="minor">
+                        {Locale.querySelect.minor}
+                      </SelectItem>
+                      <SelectItem value="research">
+                        {Locale.querySelect.research}
+                      </SelectItem>
+                      <SelectItem value="job">
+                        {Locale.querySelect.job}
+                      </SelectItem>
+                      <SelectItem value="postgraduate">
+                        {Locale.querySelect.postGraduate}
+                      </SelectItem>
+                      <SelectItem value="course">
+                        {Locale.querySelect.course}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
+      {shouldNarrow && (
+        <Card className="overflow-hidden mb-4 h-12 flex justify-center items-center">
+          {querySelect}
+        </Card>
+      )}
 
       <div
         className={styles["sidebar-body"]}
