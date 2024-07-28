@@ -14,6 +14,7 @@ export const useChatNotificationsSync = () => {
   const params = useParams();
   const chatId = params?.chatId as string | undefined;
   const chatStore = useChatStore();
+  const session = chatStore.currentSession();
 
   const fetchHistory = async () => {
     if (chatId === undefined || chatId !== chatStore.currentSession().chat_id) {
@@ -29,10 +30,12 @@ export const useChatNotificationsSync = () => {
       (messagesFromChatItems[0] && messagesFromChatItems[0].assistant !== "")
     ) {
       setMessages(messagesFromChatItems);
-
-      chatStore.resetSession();
-      for (const message of messagesFromChatItems) {
-        chatStore.addMessagesFromSupabase(message);
+      if (session.messages.length / 2 < messagesFromChatItems.length) {
+        const startIndex = Math.floor(session.messages.length / 2);
+        const filterMessages = messagesFromChatItems.slice(startIndex);
+        filterMessages.forEach((message) => {
+          chatStore.addMessagesFromSupabase(message, chatId);
+        });
       }
     }
   };

@@ -40,6 +40,18 @@ import AutoIcon from "../icons/auto.svg";
 import BottomIcon from "../icons/bottom.svg";
 import StopIcon from "../icons/pause.svg";
 import RobotIcon from "../icons/robot.svg";
+import MajorIcon from "../icons/major.svg";
+import CourseIcon from "../icons/course.svg";
+import ResearchIcon from "../icons/research.svg";
+import JobIcon from "../icons/job.svg";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import {
   ChatMessage,
@@ -340,6 +352,28 @@ function ClearContextDivider() {
   );
 }
 
+function CardItem(props: {
+  title?: string;
+  description?: string;
+  icon?: JSX.Element;
+  onClick?: () => void;
+}) {
+  return (
+    <button className="flex-1 clickable">
+      <Card className="flex flex-col h-full">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-m font-medium">
+            <div className={styles["icon-button-icon"]}>{props.icon}</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-s text-muted-foreground">{props.description}</p>
+        </CardContent>
+      </Card>
+    </button>
+  );
+}
+
 function ChatAction(props: {
   text: string;
   icon: JSX.Element;
@@ -385,6 +419,29 @@ function ChatAction(props: {
       <div className={styles["text"]} ref={textRef}>
         {props.text}
       </div>
+    </div>
+  );
+}
+
+function CardPrompt() {
+  return (
+    <div className="mx-auto mx-3 mt-10 flex max-w-3xl flex-wrap items-stretch justify-center gap-4">
+      <CardItem
+        icon={<MajorIcon />}
+        title="专业"
+        description="专业如何选择？"
+      />
+      <CardItem
+        icon={<CourseIcon />}
+        title="课程"
+        description="专业的就业前景如何？"
+      />
+      <CardItem
+        icon={<ResearchIcon />}
+        title="研究"
+        description="专业的学分？"
+      />
+      <CardItem icon={<JobIcon />} title="就业" description="专业的介绍？" />
     </div>
   );
 }
@@ -675,6 +732,7 @@ function _Chat() {
   const fontSize = config.fontSize;
 
   const [showExport, setShowExport] = useState(false);
+  const [showCard, setShowCard] = useState(true);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [userInput, setUserInput] = useState("");
@@ -808,6 +866,9 @@ function _Chat() {
   }, [session.messages, isLoading]);
 
   const doSubmit = (userInput: string) => {
+    if (showCard) {
+      setShowCard(false);
+    }
     if (userInput.trim() === "") return;
     const matchCommand = chatCommands.match(userInput);
     if (matchCommand.matched) {
@@ -1007,7 +1068,7 @@ function _Chat() {
     if (!accessStore.isAuthorized()) {
       copiedHello.content = Locale.Error.Unauthorized;
     }
-    context.push(copiedHello);
+    // context.push(copiedHello);
   }
 
   // preview messages
@@ -1064,6 +1125,10 @@ function _Chat() {
     );
     return renderMessages.slice(msgRenderIndex, endRenderIndex);
   }, [msgRenderIndex, renderMessages]);
+
+  if (messages.length !== 0 && showCard) {
+    setShowCard(false);
+  }
 
   const onChatBodyScroll = (e: HTMLElement) => {
     const bottomHeight = e.scrollTop + e.clientHeight;
@@ -1519,6 +1584,7 @@ function _Chat() {
             </Fragment>
           );
         })}
+        {showCard && <CardPrompt />}
       </div>
 
       <div className={styles["chat-input-panel"]}>

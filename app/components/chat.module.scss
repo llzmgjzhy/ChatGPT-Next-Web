@@ -45,10 +45,11 @@
 .chat-input-actions {
   display: flex;
   flex-wrap: wrap;
-  *, *::before, *::after {
-    box-sizing:initial;
+  *,
+  *::before,
+  *::after {
+    box-sizing: initial;
   }
-  
 
   .chat-input-action {
     display: inline-flex;
@@ -297,6 +298,14 @@
   padding-bottom: 20px;
   position: relative;
   overscroll-behavior: none;
+}
+
+.icon-button-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .chat-body-main-title {
@@ -628,7 +637,6 @@
 .chat-input:focus {
   box-shadow: none;
 }
-
 
 .chat-input-send {
   background-color: var(--primary);

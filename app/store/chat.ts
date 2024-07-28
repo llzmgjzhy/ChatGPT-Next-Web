@@ -246,7 +246,10 @@ export const useChatStore = createPersistStore(
         }));
       },
 
-      addMessagesFromSupabase(messages: ChatMessageSupabase) {
+      addMessagesFromSupabase(messages: ChatMessageSupabase, chat_id: string) {
+        const sessions = get().sessions;
+        const sessionIndex = sessions.findIndex((s) => s.chat_id === chat_id);
+        const session = sessions[sessionIndex];
         const userMessages = createMessage({
           role: "user",
           content: messages.user_message,
@@ -260,12 +263,11 @@ export const useChatStore = createPersistStore(
           mId: messages.chat_id,
           streaming: false,
         });
-        get().updateCurrentSession((session) => {
-          session.messages = session.messages.concat([
-            userMessages,
-            assistantMessages,
-          ]);
-        });
+        session.messages = session.messages.concat(
+          userMessages,
+          assistantMessages,
+        );
+        set(() => ({ sessions }));
       },
 
       nextSession(delta: number) {
