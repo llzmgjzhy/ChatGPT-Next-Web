@@ -37,7 +37,10 @@ export const useChatsList = () => {
   });
 
   useEffect(() => {
-    setAllChats(chats ?? []);
+    if (chats) {
+      setAllChats(chats);
+    }
+    console.log(chats);
     if (chats !== allChats) {
       chatStore.clearSessions();
       for (const chat of chats ?? []) {
