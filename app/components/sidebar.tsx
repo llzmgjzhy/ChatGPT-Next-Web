@@ -63,13 +63,6 @@ const ChatList = dynamic(
   },
 );
 
-const HomeworkList = dynamic(
-  async () => (await import("@/app/components/homework-list")).ChatList,
-  {
-    loading: () => null,
-  },
-);
-
 function useHotKey() {
   const chatStore = useChatStore();
 
@@ -165,33 +158,22 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
-  const homeworkStore = useHomeworkStore();
-  const [isChat, setIsChat] = useState<boolean>(false);
-  const [isHomework, setIsHomework] = useState<boolean>(false);
   const [querySelect, setQuerySelect] = useState<string>("major");
 
   const router = useRouter();
-  const pathname = usePathname();
 
   // drag side bar
   const { onDragStart, shouldNarrow } = useDragSideBar();
-  const navigate = useNavigate();
   const config = useAppConfig();
   const isMobileScreen = useMobileScreen();
   const isIOSMobile = useMemo(
     () => isIOS() && isMobileScreen,
     [isMobileScreen],
   );
-  const { session } = useSupabase();
 
   function onSelectChange(event: string) {
     setQuerySelect(event);
   }
-
-  useEffect(() => {
-    setIsChat(pathname.includes("chat"));
-    setIsHomework(pathname.includes("homework"));
-  }, [pathname]);
 
   useHotKey();
 
@@ -301,14 +283,13 @@ export function SideBar(props: { className?: string }) {
 
       <div
         className={styles["sidebar-body"]}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            navigate(Path.Home);
-          }
-        }}
+        // onClick={(e) => {
+        //   if (e.target === e.currentTarget) {
+        //     navigate(Path.Home);
+        //   }
+        // }}
       >
-        {isChat && <ChatList narrow={shouldNarrow} />}
-        {isHomework && <HomeworkList narrow={shouldNarrow} />}
+        <ChatList narrow={shouldNarrow} />
       </div>
 
       <div className={styles["sidebar-tail"]}>
@@ -341,26 +322,24 @@ export function SideBar(props: { className?: string }) {
             </a>
           </div> */}
         </div>
-        {!isHomework && (
-          <div className={styles["sidebar-tail-bar"]}>
-            <IconButton
-              icon={<AddIcon />}
-              text={shouldNarrow ? undefined : Locale.Home.NewChat}
-              className={styles["sidebar-tail-bar-button"]}
-              onClick={() => {
-                if (chatStore.sessions[0].chat_id !== "") {
-                  chatStore.newSession();
-                  router.push(`/chat/${""}`);
-                } else {
-                  chatStore.selectSession(0);
-                  router.push(`/chat/${""}`);
-                }
-              }}
-              shadow
-            />
-          </div>
-        )}
-        {isHomework && session?.user.user_metadata.role === "admin" && (
+        <div className={styles["sidebar-tail-bar"]}>
+          <IconButton
+            icon={<AddIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.NewChat}
+            className={styles["sidebar-tail-bar-button"]}
+            onClick={() => {
+              if (chatStore.sessions[0].chat_id !== "") {
+                router.push(`/chat/${""}`);
+                chatStore.newSession();
+              } else {
+                chatStore.selectSession(0);
+                router.push(`/chat/${""}`);
+              }
+            }}
+            shadow
+          />
+        </div>
+        {/* {isHomework && session?.user.user_metadata.role === "admin" && (
           <div className={styles["sidebar-tail-bar"]}>
             <IconButton
               icon={<AddIcon />}
@@ -375,7 +354,7 @@ export function SideBar(props: { className?: string }) {
               shadow
             />
           </div>
-        )}
+        )} */}
       </div>
 
       <div

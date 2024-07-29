@@ -406,18 +406,15 @@ function ChatAction(props: {
 
 function CardItem(props: {
   title?: string;
-  description?: string;
+  description: string;
   icon?: JSX.Element;
+  click: (promptSentence: string) => void;
 }) {
-  const promptClick = (description: string | undefined) => {
-    console.log(description);
-  };
-
   return (
     <button
       className="flex-1 clickable"
       onClick={() => {
-        promptClick(props.description);
+        props.click(props.description);
       }}
     >
       <Card className="flex flex-col h-full">
@@ -434,25 +431,35 @@ function CardItem(props: {
   );
 }
 
-function CardPrompt() {
+export function CardPrompt(props: {
+  cardPromptClick: (promptSentence: string) => void;
+}) {
   return (
     <div className="mx-auto mx-3 mt-10 flex max-w-3xl flex-wrap items-stretch justify-center gap-4">
       <CardItem
         icon={<MajorIcon />}
         title="专业"
         description="专业如何选择？"
+        click={props.cardPromptClick}
       />
       <CardItem
         icon={<CourseIcon />}
         title="课程"
         description="专业的就业前景如何？"
+        click={props.cardPromptClick}
       />
       <CardItem
         icon={<ResearchIcon />}
         title="研究"
         description="专业的学分？"
+        click={props.cardPromptClick}
       />
-      <CardItem icon={<JobIcon />} title="就业" description="专业的介绍？" />
+      <CardItem
+        icon={<JobIcon />}
+        title="就业"
+        description="专业的介绍？"
+        click={props.cardPromptClick}
+      />
     </div>
   );
 }
@@ -1597,7 +1604,13 @@ function _Chat() {
             </Fragment>
           );
         })}
-        {showCard && !messageLoading && <CardPrompt />}
+        {!messageLoading && showCard && (
+          <CardPrompt
+            cardPromptClick={(promptSentence: string) => {
+              doSubmit(promptSentence);
+            }}
+          />
+        )}
         {!!messageLoading && <Loading />}
       </div>
 

@@ -23,7 +23,7 @@ import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { useRouter, useParams } from "next/navigation";
 import { useChatsList } from "@/app/chat/[chatId]/hooks/useChatsList";
 import { useChatNotificationsSync } from "@/app/chat/[chatId]/hooks/useChatNotificationsSync";
-import { useScrollToBottom } from "@/app/components/chat";
+import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -116,6 +116,7 @@ export function ChatList(props: { narrow?: boolean }) {
       state.moveSession,
       state.deleteSession,
     ]);
+  const { allChats } = useChatsContext();
   useChatsList();
   const { deChat } = useChat();
   const router = useRouter();
@@ -125,16 +126,6 @@ export function ChatList(props: { narrow?: boolean }) {
   const chatStore = useChatStore();
   const { fetchHistory } = useChatNotificationsSync();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const isScrolledToBottom = scrollRef?.current
-    ? Math.abs(
-        scrollRef.current.scrollHeight -
-          (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
-      ) <= 1
-    : false;
-  const { setAutoScroll, scrollDomToBottom } = useScrollToBottom(
-    scrollRef,
-    isScrolledToBottom,
-  );
 
   useEffect(() => {
     if (
@@ -142,16 +133,15 @@ export function ChatList(props: { narrow?: boolean }) {
       chatStore.currentSession().chat_id !== chatId &&
       chatStore.sessions.length > 1
     ) {
-      chatStore.sessions.map((item, i) => {
+      chatStore.sessions.forEach((item, i) => {
         if (item.chat_id === chatId) {
           selectSession(i);
           fetchHistory();
-          scrollDomToBottom();
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatStore.sessions.length]);
+  }, [allChats]);
 
   const onDragEnd: OnDragEndResponder = (result) => {
     const { destination, source } = result;
