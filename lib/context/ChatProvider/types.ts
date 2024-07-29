@@ -1,7 +1,5 @@
 import { ChatMessage, Notification } from "@/app/chat/[chatId]/types";
-import {
-    DEFAULT_MODELS,
-  } from "@/app/constant";
+import { DEFAULT_MODELS } from "@/app/constant";
 
 // import { Model } from "../../types/BrainConfig";
 type Model = (typeof DEFAULT_MODELS)[number]["name"];
@@ -21,6 +19,8 @@ export type ChatContextProps = {
   removeMessage: (id: string) => void;
   sourcesMessageIndex: number | undefined;
   setSourcesMessageIndex: (index: number | undefined) => void;
+  messageLoading: boolean;
+  setMessageLoading: (messageLoading: boolean) => void;
   chatId: string;
   setChatId: (chatId: string) => void;
   homeworkId: string;

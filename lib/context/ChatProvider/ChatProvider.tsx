@@ -7,7 +7,7 @@ import { ChatMessage, Notification } from "@/app/chat/[chatId]/types";
 import { ChatContextProps } from "./types";
 
 export const ChatContext = createContext<ChatContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 export const ChatProvider = ({
@@ -20,13 +20,14 @@ export const ChatProvider = ({
   const [sourcesMessageIndex, setSourcesMessageIndex] = useState<
     number | undefined
   >(undefined);
-  const [chatId,setChatId] = useState<string>("" as string);
-  const [homeworkId,setHomeworkId] = useState<string>("" as string);
+  const [messageLoading, setMessageLoading] = useState<boolean>(false);
+  const [chatId, setChatId] = useState<string>("" as string);
+  const [homeworkId, setHomeworkId] = useState<string>("" as string);
 
   const updateStreamingHistory = (streamedChat: ChatMessage): void => {
     setMessages((prevHistory: ChatMessage[]) => {
       const updatedHistory = prevHistory.find(
-        (item) => item.message_id === streamedChat.message_id
+        (item) => item.message_id === streamedChat.message_id,
       )
         ? prevHistory.map((item: ChatMessage) =>
             item.message_id === streamedChat.message_id
@@ -35,7 +36,7 @@ export const ChatProvider = ({
                   assistant: item.assistant + streamedChat.assistant,
                   metadata: streamedChat.metadata,
                 }
-              : item
+              : item,
           )
         : [...prevHistory, streamedChat];
 
@@ -45,7 +46,7 @@ export const ChatProvider = ({
 
   const removeMessage = (id: string): void => {
     setMessages((prevHistory: ChatMessage[]) =>
-      prevHistory.filter((item) => item.message_id !== id)
+      prevHistory.filter((item) => item.message_id !== id),
     );
   };
 
@@ -60,6 +61,8 @@ export const ChatProvider = ({
         setNotifications,
         sourcesMessageIndex,
         setSourcesMessageIndex,
+        messageLoading,
+        setMessageLoading,
         chatId,
         setChatId,
         homeworkId,

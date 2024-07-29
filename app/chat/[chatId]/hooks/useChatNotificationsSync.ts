@@ -9,7 +9,7 @@ import { getMessagesFromChatItems } from "../utils/getMessagesFromChatItems";
 import { useChatStore } from "@/app/store";
 
 export const useChatNotificationsSync = () => {
-  const { setMessages, setNotifications } = useChatContext();
+  const { setMessages, setNotifications, setMessageLoading } = useChatContext();
   const { getChatItems } = useChatApi();
   const params = useParams();
   const chatId = params?.chatId as string | undefined;
@@ -22,6 +22,9 @@ export const useChatNotificationsSync = () => {
       setNotifications([]);
 
       return;
+    }
+    if (session.messages.length === 0) {
+      setMessageLoading(true);
     }
     const chatItems = await getChatItems(chatId);
     const messagesFromChatItems = getMessagesFromChatItems(chatItems);
@@ -37,6 +40,7 @@ export const useChatNotificationsSync = () => {
           chatStore.addMessagesFromSupabase(message, chatId);
         });
       }
+      setMessageLoading(false);
     }
   };
 

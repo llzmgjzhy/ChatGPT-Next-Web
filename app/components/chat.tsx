@@ -113,6 +113,9 @@ import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
+import { Loading } from "@/app/components/home";
+import { useChatContext } from "@/lib/context";
+import { Description } from "@radix-ui/react-toast";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -352,28 +355,6 @@ function ClearContextDivider() {
   );
 }
 
-function CardItem(props: {
-  title?: string;
-  description?: string;
-  icon?: JSX.Element;
-  onClick?: () => void;
-}) {
-  return (
-    <button className="flex-1 clickable">
-      <Card className="flex flex-col h-full">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-m font-medium">
-            <div className={styles["icon-button-icon"]}>{props.icon}</div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-s text-muted-foreground">{props.description}</p>
-        </CardContent>
-      </Card>
-    </button>
-  );
-}
-
 function ChatAction(props: {
   text: string;
   icon: JSX.Element;
@@ -420,6 +401,36 @@ function ChatAction(props: {
         {props.text}
       </div>
     </div>
+  );
+}
+
+function CardItem(props: {
+  title?: string;
+  description?: string;
+  icon?: JSX.Element;
+}) {
+  const promptClick = (description: string | undefined) => {
+    console.log(description);
+  };
+
+  return (
+    <button
+      className="flex-1 clickable"
+      onClick={() => {
+        promptClick(props.description);
+      }}
+    >
+      <Card className="flex flex-col h-full">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-m font-medium">
+            <div className={styles["icon-button-icon"]}>{props.icon}</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-s text-muted-foreground">{props.description}</p>
+        </CardContent>
+      </Card>
+    </button>
   );
 }
 
@@ -558,6 +569,7 @@ export function ChatActions(props: {
           icon={<StopIcon />}
         />
       )}
+      {""}
       {!props.hitBottom && (
         <ChatAction
           onClick={props.scrollToBottom}
@@ -565,13 +577,13 @@ export function ChatActions(props: {
           icon={<BottomIcon />}
         />
       )}
-      {props.hitBottom && (
+      {/* {props.hitBottom && (
         <ChatAction
           onClick={props.showPromptModal}
           text={Locale.Chat.InputActions.Settings}
           icon={<SettingsIcon />}
         />
-      )}
+      )} */}
 
       {showUploadImage && (
         <ChatAction
@@ -580,7 +592,7 @@ export function ChatActions(props: {
           icon={props.uploading ? <LoadingButtonIcon /> : <ImageIcon />}
         />
       )}
-      <ChatAction
+      {/* <ChatAction
         onClick={nextTheme}
         text={Locale.Chat.InputActions.Theme[theme]}
         icon={
@@ -594,23 +606,23 @@ export function ChatActions(props: {
             ) : null}
           </>
         }
-      />
+      /> */}
 
-      <ChatAction
+      {/* <ChatAction
         onClick={props.showPromptHints}
         text={Locale.Chat.InputActions.Prompt}
         icon={<PromptIcon />}
-      />
+      /> */}
 
-      <ChatAction
+      {/* <ChatAction
         onClick={() => {
           navigate(Path.Masks);
         }}
         text={Locale.Chat.InputActions.Masks}
         icon={<MaskIcon />}
-      />
+      /> */}
 
-      <ChatAction
+      {/* <ChatAction
         text={Locale.Chat.InputActions.Clear}
         icon={<BreakIcon />}
         onClick={() => {
@@ -623,15 +635,15 @@ export function ChatActions(props: {
             }
           });
         }}
-      />
+      /> */}
 
-      <ChatAction
+      {/* <ChatAction
         onClick={() => setShowModelSelector(true)}
         text={currentModel}
         icon={<RobotIcon />}
-      />
+      /> */}
 
-      {showModelSelector && (
+      {/* {showModelSelector && (
         <Selector
           defaultSelectedValue={currentModel}
           items={models.map((m) => ({
@@ -648,7 +660,7 @@ export function ChatActions(props: {
             showToast(s[0]);
           }}
         />
-      )}
+      )} */}
     </div>
   );
 }
@@ -754,6 +766,7 @@ function _Chat() {
   const navigate = useNavigate();
   const [attachImages, setAttachImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const { messageLoading } = useChatContext();
 
   // prompt hints
   const promptStore = usePromptStore();
@@ -1584,7 +1597,8 @@ function _Chat() {
             </Fragment>
           );
         })}
-        {showCard && <CardPrompt />}
+        {showCard && !messageLoading && <CardPrompt />}
+        {!!messageLoading && <Loading />}
       </div>
 
       <div className={styles["chat-input-panel"]}>
@@ -1664,7 +1678,7 @@ function _Chat() {
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}
-            disabled={isLoading}
+            disabled={isLoading || messageLoading}
           />
         </label>
       </div>
