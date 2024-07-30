@@ -22,6 +22,9 @@ import {
   SelectGroup,
   SelectValue,
 } from "@/components/ui/select";
+import { useSupabase } from "@/lib/context/SupabaseProvider";
+import { access } from "fs";
+import { set } from "react-hook-form";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -31,6 +34,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const options = {
   cMapUrl: "/cmaps/",
   standardFontDataUrl: "/standard_fonts/",
+  disableAutoFetch: true,
+  disableStream: true,
 };
 
 const resizeObserverOptions = {};
@@ -40,9 +45,14 @@ const maxWidth = 1500;
 type PDFFile = string | File | null;
 
 export function PdfBook() {
-  const [file, setFile] = useState<PDFFile>(
-    "http://47.121.195.173:3000/reference_book.pdf",
-  );
+  // const [file, setFile] = useState<PDFFile>("http://localhost:5050/pdf");
+  let { session } = useSupabase();
+  const access_token = session?.access_token || "";
+  function setFileName(fileName: string = "lesson_book.pdf") {
+    const urlPath = `/api/pdf/${fileName}/${access_token}`;
+    return urlPath;
+  }
+  const [file, setFile] = useState<PDFFile>(setFileName());
   const [numPages, setNumPages] = useState<number>();
   const [PageNumber, setPageNumber] = useState<number>(1);
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
@@ -122,6 +132,7 @@ export function PdfBook() {
                 width={
                   containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth
                 }
+                renderTextLayer={true}
                 scale={pageScale}
                 className={"FilePreview__container__Page"}
               />

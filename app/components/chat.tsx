@@ -856,6 +856,7 @@ function _Chat() {
   useEffect(() => {
     if (
       session.messages.length > 0 &&
+      session.chat_id &&
       !session.messages[session.messages.length - 1].streaming &&
       !isLoading
     ) {

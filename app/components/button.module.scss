@@ -43,9 +43,24 @@
     }
   }
 
-  &:hover,
-  &:focus {
-    border-color: var(--primary);
+  &:hover {
+    background-color: var(--hover-color-1);
+  }
+
+  @keyframes button-click {
+    0% {
+      background-color: #e5e5e5;
+    }
+    50% {
+      background-color: #d5cece;
+    }
+    100% {
+      background-color: #ffffff;
+    }
+  }
+  &:active {
+    // background-color: var(--primary);
+    animation: button-click 0.3s;
   }
 }
 

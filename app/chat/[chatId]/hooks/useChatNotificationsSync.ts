@@ -34,14 +34,15 @@ export const useChatNotificationsSync = () => {
     ) {
       setMessages(messagesFromChatItems);
       if (session.messages.length / 2 < messagesFromChatItems.length) {
+        setMessageLoading(true);
         const startIndex = Math.floor(session.messages.length / 2);
         const filterMessages = messagesFromChatItems.slice(startIndex);
         filterMessages.forEach((message) => {
           chatStore.addMessagesFromSupabase(message, chatId);
         });
       }
-      setMessageLoading(false);
     }
+    setMessageLoading(false);
   };
 
   useEffect(() => {
