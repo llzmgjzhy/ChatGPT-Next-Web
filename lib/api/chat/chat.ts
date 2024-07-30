@@ -17,7 +17,7 @@ export type ChatMessageUpdatableProperties = {
 
 export const createChat = async (
   name: string,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatEntity> => {
   const createdChat = (
     await axiosInstance.post<ChatEntity>("/chat", { name: name })
@@ -27,7 +27,7 @@ export const createChat = async (
 };
 
 export const getChats = async (
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatEntity[]> => {
   const response = await axiosInstance.get<{
     chats: ChatEntity[];
@@ -38,7 +38,7 @@ export const getChats = async (
 
 export const deleteChat = async (
   chatId: string,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<void> => {
   await axiosInstance.delete(`/chat/${chatId}`);
 };
@@ -51,11 +51,11 @@ export type AddQuestionParams = {
 
 export const addQuestion = async (
   { chatId, chatQuestion, brainId }: AddQuestionParams,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatMessage> => {
   const response = await axiosInstance.post<ChatMessage>(
     `/chat/${chatId}/question?brain_id=${brainId}`,
-    chatQuestion
+    chatQuestion,
   );
 
   return response.data;
@@ -63,14 +63,14 @@ export const addQuestion = async (
 
 export const getChatItems = async (
   chatId: string,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatItem[]> =>
   (await axiosInstance.get<ChatItem[]>(`/chat/${chatId}/history`)).data;
 
 export const updateChat = async (
   chatId: string,
   chat: ChatUpdatableProperties,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatEntity> => {
   return (await axiosInstance.put<ChatEntity>(`/chat/${chatId}/metadata`, chat))
     .data;
@@ -80,12 +80,20 @@ export const updateChatMessage = async (
   chatId: string,
   messageId: string,
   chatMessageUpdatableProperties: ChatMessageUpdatableProperties,
-  axiosInstance: AxiosInstance
+  axiosInstance: AxiosInstance,
 ): Promise<ChatItem> => {
   return (
     await axiosInstance.put<ChatItem>(
       `/chat/${chatId}/${messageId}`,
-      chatMessageUpdatableProperties
+      chatMessageUpdatableProperties,
     )
   ).data;
+};
+
+export const deleteChatMessage = async (
+  chatId: string,
+  messageId: string,
+  axiosInstance: AxiosInstance,
+): Promise<void> => {
+  await axiosInstance.delete(`/chat/${chatId}/${messageId}`);
 };

@@ -40,7 +40,6 @@ export const useChatsList = () => {
     if (chats) {
       setAllChats(chats);
     }
-    console.log(chats);
     if (chats !== allChats) {
       chatStore.clearSessions();
       for (const chat of chats ?? []) {

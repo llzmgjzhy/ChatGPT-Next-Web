@@ -841,7 +841,8 @@ function _Chat() {
     }
   };
 
-  const { addNewChat, updateChatName, addQuestionAnswer } = useChat();
+  const { addNewChat, updateChatName, addQuestionAnswer, deleteChatMessage } =
+    useChat();
 
   // if session.topic change,update supabase chat name
   useEffect(() => {
@@ -1050,9 +1051,11 @@ function _Chat() {
       return;
     }
 
-    // delete the original messages
+    // delete the original messages and corresponding supabase data
     deleteMessage(userMessage.id);
     deleteMessage(botMessage?.id);
+    let messageId = botMessage?.mId ? botMessage.mId : "";
+    deleteChatMessage(session.chat_id, messageId);
 
     // resend the message
     setIsLoading(true);
@@ -1444,7 +1447,7 @@ function _Chat() {
                 <div className={styles["chat-message-container"]}>
                   <div className={styles["chat-message-header"]}>
                     <div className={styles["chat-message-avatar"]}>
-                      <div className={styles["chat-message-edit"]}>
+                      {/* <div className={styles["chat-message-edit"]}>
                         <IconButton
                           icon={<EditIcon />}
                           onClick={async () => {
@@ -1477,7 +1480,7 @@ function _Chat() {
                             });
                           }}
                         ></IconButton>
-                      </div>
+                      </div> */}
                       {isUser ? (
                         <Avatar avatar={config.avatar} />
                       ) : (
@@ -1496,7 +1499,7 @@ function _Chat() {
                       )}
                     </div>
 
-                    {showActions && (
+                    {showActions && !isUser && (
                       <div className={styles["chat-message-actions"]}>
                         <div className={styles["chat-input-actions"]}>
                           {message.streaming ? (
@@ -1512,18 +1515,18 @@ function _Chat() {
                                 icon={<ResetIcon />}
                                 onClick={() => onResend(message)}
                               />
-
+                              {/* 
                               <ChatAction
                                 text={Locale.Chat.Actions.Delete}
                                 icon={<DeleteIcon />}
                                 onClick={() => onDelete(message.id ?? i)}
-                              />
+                              /> */}
 
-                              <ChatAction
+                              {/* <ChatAction
                                 text={Locale.Chat.Actions.Pin}
                                 icon={<PinIcon />}
                                 onClick={() => onPinMessage(message)}
-                              />
+                              /> */}
                               <ChatAction
                                 text={Locale.Chat.Actions.Copy}
                                 icon={<CopyIcon />}
@@ -1604,7 +1607,7 @@ function _Chat() {
             </Fragment>
           );
         })}
-        {!messageLoading && showCard && (
+        {!session?.chat_id && !messageLoading && showCard && (
           <CardPrompt
             cardPromptClick={(promptSentence: string) => {
               doSubmit(promptSentence);

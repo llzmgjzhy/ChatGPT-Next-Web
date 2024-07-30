@@ -31,8 +31,13 @@ export const useChat = () => {
   const { messages } = useChatContext();
   // const { currentBrain, currentPromptId, currentBrainId } = useBrainContext();
   const { toast } = useToast();
-  const { createChat, updateChat, deleteChat, addQuestionAndAnswer } =
-    useChatApi();
+  const {
+    createChat,
+    updateChat,
+    deleteChat,
+    addQuestionAndAnswer,
+    deleteChatMessage,
+  } = useChatApi();
 
   const modelConfig = {
     ...useAppConfig.getState().modelConfig,
@@ -190,5 +195,6 @@ export const useChat = () => {
     updateChatName,
     deChat,
     addQuestionAnswer,
+    deleteChatMessage,
   };
 };

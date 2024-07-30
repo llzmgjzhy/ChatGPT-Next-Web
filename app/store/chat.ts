@@ -254,13 +254,13 @@ export const useChatStore = createPersistStore(
           role: "user",
           content: messages.user_message,
           date: messages.message_time,
-          mId: messages.chat_id,
+          mId: messages.message_id,
         });
         const assistantMessages = createMessage({
           role: "assistant",
           content: messages.assistant,
           date: messages.message_time,
-          mId: messages.chat_id,
+          mId: messages.message_id,
           streaming: false,
         });
         session.messages = session.messages.concat(
