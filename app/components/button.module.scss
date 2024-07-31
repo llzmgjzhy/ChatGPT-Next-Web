@@ -91,6 +91,7 @@
   font-weight: bold; /* Added font-weight property */
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: var(--font-family);
   white-space: nowrap;
 
   &:not(:first-child) {

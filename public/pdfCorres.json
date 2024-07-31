@@ -1,0 +1,86 @@
+{
+  "major": {
+    "major1": {
+      "showName": "北京大学本科专业核心课程手册理科卷2023",
+      "fileName": "202309010913345336-北京大学本科专业核心课程手册理科卷2023.pdf"
+    },
+    "major2": {
+      "showName": "北京大学本科专业核心课程手册文科卷2023",
+      "fileName": "202309010913521800-北京大学本科专业核心课程手册文科卷2023.pdf"
+    }
+  },
+  "courseSelect": {
+    "course1": {
+      "showName": "2021-北大医学部选课手册-第一学期",
+      "fileName": "2021-北大医学部选课手册-第一学期.pdf"
+    },
+    "course2": {
+      "showName": "2021-北大医学部选课手册-第二学期",
+      "fileName": "2021-北大医学部选课手册-第二学期.pdf"
+    },
+    "course3": {
+      "showName": "2024-北大医学部选课手册-第一学期",
+      "fileName": "202401121138102102-北大选课手册-第一学期.pdf"
+    },
+    "course4": {
+      "showName": "2024北大医学部选课手册-第二学期",
+      "fileName": "202401121138102102-北大选课手册-第二学期.pdff"
+    }
+  },
+  "undergraduateTraining": {
+    "undergraduateTraining1": {
+      "showName": "2024级医学技术本科生培养方案-v1",
+      "fileName": "2024级医学技术本科生培养方案-v1.pdf"
+    },
+    "undergraduateTraining2": {
+      "showName": "2024-医学技术培养方案",
+      "fileName": "2024-医学技术培养方案.pdf"
+    },
+    "undergraduateTraining3": {
+      "showName": "2024-医学检验技术本科培养",
+      "fileName": "2024-医学检验技术本科培养.pdf"
+    },
+    "undergraduateTraining4": {
+      "showName": "2024-医学影像技术本科培养",
+      "fileName": "2024-医学影像技术本科培养.pdf"
+    },
+    "undergraduateTraining5": {
+      "showName": "北京大学本科生学籍管理办法",
+      "fileName": "20200331204604473857-北京大学本科生学籍管理办法.pdf"
+    }
+  },
+  "minor": {
+    "minor1": {
+      "showName": "北京大学本科生辅修双学位教学手册2023",
+      "fileName": "202309010912339051-北京大学本科生辅修双学位教学手册(2023).pdf"
+    }
+  },
+  "research": {
+    "research1": {
+      "showName": "北京大学第三十一届“挑战杯”系列赛事获奖名单",
+      "fileName": "北京大学第三十一届“挑战杯”系列赛事获奖名单.pdf"
+    }
+  },
+  "job": {
+    "job1": {
+      "showName": "北大医学部学生手册",
+      "fileName": "20230818110903293529-北大医学部学生手册.pdf"
+    }
+  },
+  "postGraduate": {
+    "postGraduate1": {
+      "showName": "北大医学部学生手册",
+      "fileName": "20230818110903293529-北大医学部学生手册.pdf"
+    }
+  },
+  "course": {
+    "course1": {
+      "showName": "医学技术第一学年教材",
+      "fileName": "20230623082318035375-医学技术第一学年教材.pdf"
+    },
+    "course2": {
+      "showName": "医学技术学",
+      "fileName": "《医学技术学》V2-231215.pdf"
+    }
+  }
+}

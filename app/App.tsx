@@ -10,6 +10,7 @@ import { useMobileScreen } from "@/app/utils";
 import { getLang } from "@/app/locales";
 import { ChatsProvider } from "@/lib/context/ChatsProvider";
 import { ChatProvider } from "@/lib/context";
+import { AskDirectProvider } from "@/lib/context/AskDirectProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 
@@ -53,11 +54,13 @@ const AppWithQueryClient = ({ children }: PropsWithChildren): JSX.Element => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ChatsProvider>
-          <ChatProvider>
-            <App>{children}</App>
-          </ChatProvider>
-        </ChatsProvider>
+        <AskDirectProvider>
+          <ChatsProvider>
+            <ChatProvider>
+              <App>{children}</App>
+            </ChatProvider>
+          </ChatsProvider>
+        </AskDirectProvider>
       </QueryClientProvider>
     </>
   );

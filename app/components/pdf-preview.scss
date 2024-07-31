@@ -52,7 +52,7 @@ input[type="number"] {
   margin: 0;
 }
 
-.FilePreview__container {
+.FilePreview-container {
   display: flex;
   // flex-direction: column;
   // align-items: center;
@@ -62,26 +62,27 @@ input[type="number"] {
   overflow: auto;
 }
 
-.FilePreview__container__load {
+.FilePreview-container-load {
   // margin-top: 1em;
   color: white;
 }
 
-.FilePreview__container__document {
+.FilePreview-container-document {
   width: 100%;
   //max-width: calc(100% - 2em);
   //margin: 1em 0;
 }
 
-.FilePreview__container__document .react-pdf__Document {
+.FilePreview-container-document .react-pdf-Document {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.FilePreview__container__document .react-pdf__Page {
+.FilePreview-container-document .react-pdf-Page {
   /*margin: 1em 0;
-  */box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -89,20 +90,40 @@ input[type="number"] {
   -o-border-radius: 2px;
 }
 
-.FilePreview__container__document .react-pdf__message {
+.FilePreview-container-document .react-pdf-message {
   padding: 20px;
   color: white;
 }
 
-.Test__container__content__controls {
+.container-content-controls {
   text-align: center;
   align-content: center;
   display: flex;
   justify-content: center;
   bottom: 5px;
-  .Test__container__content__controls__button {
+  .container-content-controls-button {
     margin: 0 5px;
-    // background-color: #9be2ff;
   }
-  padding: 5px;
+  padding: 0 5px 5px 5px;
+}
+
+.DropdownMenuItem {
+  &:hover {
+    background-color: var(--hover-color-1);
+  }
+  @keyframes button-click {
+    0% {
+      background-color: #e5e5e5;
+    }
+    50% {
+      background-color: #d5cece;
+    }
+    100% {
+      background-color: #ffffff;
+    }
+  }
+  &:active {
+    // background-color: var(--primary);
+    animation: button-click 0.3s;
+  }
 }

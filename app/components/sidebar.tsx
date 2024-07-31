@@ -16,12 +16,10 @@ import DeleteIcon from "@/app/icons/delete.svg";
 import MaskIcon from "@/app/icons/chat.svg";
 import PluginIcon from "@/app/icons/edit.svg";
 import DragIcon from "@/app/icons/drag.svg";
-import { useSupabase } from "@/lib/context/SupabaseProvider";
 
 import Locale from "@/app/locales";
 
 import { useAppConfig, useChatStore } from "@/app/store";
-import { useHomeworkStore } from "@/app/store/homework";
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -32,13 +30,10 @@ import {
   REPO_URL,
 } from "@/app/constant";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 
-import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "@/app/utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "@/app/components/ui-lib";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -54,7 +49,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { set } from "react-hook-form";
+import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
 
 const ChatList = dynamic(
   async () => (await import("@/app/components/chat-list")).ChatList,
@@ -158,7 +153,7 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
-  const [querySelect, setQuerySelect] = useState<string>("major");
+  const { askDirect, setAskDirect } = useAskDirectContext();
 
   const router = useRouter();
 
@@ -172,7 +167,7 @@ export function SideBar(props: { className?: string }) {
   );
 
   function onSelectChange(event: string) {
-    setQuerySelect(event);
+    setAskDirect(event);
   }
 
   useHotKey();
@@ -239,33 +234,19 @@ export function SideBar(props: { className?: string }) {
                 <div className="flex flex-col space-y-1.5">
                   <Select
                     onValueChange={onSelectChange}
-                    defaultValue={querySelect}
+                    defaultValue={askDirect}
                   >
                     <SelectTrigger id="medimind">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                      <SelectItem value="major">
-                        {Locale.querySelect.major}
-                      </SelectItem>
-                      <SelectItem value="course-select">
-                        {Locale.querySelect.courseSelect}
-                      </SelectItem>
-                      <SelectItem value="minor">
-                        {Locale.querySelect.minor}
-                      </SelectItem>
-                      <SelectItem value="research">
-                        {Locale.querySelect.research}
-                      </SelectItem>
-                      <SelectItem value="job">
-                        {Locale.querySelect.job}
-                      </SelectItem>
-                      <SelectItem value="postgraduate">
-                        {Locale.querySelect.postGraduate}
-                      </SelectItem>
-                      <SelectItem value="course">
-                        {Locale.querySelect.course}
-                      </SelectItem>
+                      {Object.entries(Locale.querySelect).map(
+                        ([key, value]) => (
+                          <SelectItem key={key} value={key}>
+                            {value}
+                          </SelectItem>
+                        ),
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -277,7 +258,7 @@ export function SideBar(props: { className?: string }) {
 
       {shouldNarrow && (
         <Card className="overflow-hidden mb-4 h-12 flex justify-center items-center">
-          {querySelect}
+          {askDirect}
         </Card>
       )}
 

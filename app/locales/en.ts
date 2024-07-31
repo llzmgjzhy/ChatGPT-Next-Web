@@ -521,12 +521,16 @@ const en: LocaleType = {
   querySelect: {
     major: "major",
     courseSelect: "course select",
+    undergraduateTraining: "Undergraduate training",
     minor: "minor",
     research: "research",
     job: "job",
     postGraduate: "postgraduate recommendation",
     course: "course",
     title: "Select inquiry direction.",
+  },
+  pdfSelect: {
+    title: "Select pdf file.",
   },
 };
 

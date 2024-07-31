@@ -94,8 +94,8 @@
 html {
   height: var(--full-height);
 
-  font-family: sans-serif, "SF Pro Text", "SF Pro SC", "Helvetica Neue",
-    "PingFang SC", "Noto Sans", "SF Pro Icons", "Helvetica", "Arial";
+  font-family: "Arial", sans-serif, "SF Pro Text", "SF Pro SC", "Helvetica Neue",
+    "PingFang SC", "Noto Sans", "SF Pro Icons", "Helvetica";
 }
 
 body {
@@ -137,7 +137,6 @@ body {
   background-clip: content-box;
   border: 1px solid transparent;
 }
-
 
 label {
   cursor: pointer;

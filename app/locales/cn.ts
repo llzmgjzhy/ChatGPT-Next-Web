@@ -514,12 +514,16 @@ const cn = {
   querySelect: {
     major: "专业",
     courseSelect: "选课",
+    undergraduateTraining: "本科培养",
     minor: "辅修",
-    research: "研究",
+    research: "科研",
     job: "就业",
     postGraduate: "保研",
     course: "课程",
     title: "选择询问方向",
+  },
+  pdfSelect: {
+    title: "资料选择",
   },
 };
 
