@@ -10,19 +10,19 @@
     }
   },
   "courseSelect": {
-    "course1": {
+    "courseSelect1": {
       "showName": "2021-北大医学部选课手册-第一学期",
       "fileName": "2021-北大医学部选课手册-第一学期.pdf"
     },
-    "course2": {
+    "courseSelect2": {
       "showName": "2021-北大医学部选课手册-第二学期",
       "fileName": "2021-北大医学部选课手册-第二学期.pdf"
     },
-    "course3": {
+    "courseSelect3": {
       "showName": "2024-北大医学部选课手册-第一学期",
       "fileName": "202401121138102102-北大选课手册-第一学期.pdf"
     },
-    "course4": {
+    "courseSelect4": {
       "showName": "2024北大医学部选课手册-第二学期",
       "fileName": "202401121138102102-北大选课手册-第二学期.pdff"
     }

@@ -531,6 +531,12 @@ const en: LocaleType = {
   },
   pdfSelect: {
     title: "Select pdf file.",
+    zoomIn: "zoom in",
+    zoomOut: "zoom out",
+    nextPage: "next page",
+    nextPageEnd: "It's already the last page.",
+    previousPage: "previous page",
+    previousPageEnd: "It's already the first page.",
   },
 };
 

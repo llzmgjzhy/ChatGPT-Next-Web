@@ -10,6 +10,10 @@
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
   user-select: text;
+  input,
+  button {
+    font: inherit;
+  }
 }
 
 .FilePreview input,
@@ -32,13 +36,6 @@
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
 }
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-input[type="number"] {
-  -moz-appearance: textfield;
-}
 
 .FilePreview header {
   background-color: #323639;
@@ -54,23 +51,29 @@ input[type="number"] {
 
 .FilePreview-container {
   display: flex;
-  // flex-direction: column;
-  // align-items: center;
+  flex-direction: column;
+  align-items: center;
   margin: 10px 0;
   padding: 10px;
   height: 100%;
-  overflow: auto;
+  overflow: scroll;
 }
 
 .FilePreview-container-load {
-  // margin-top: 1em;
+  margin-top: 1em;
   color: white;
 }
 
-.FilePreview-container-document {
+.FilePreview-container-document-start {
   width: 100%;
-  //max-width: calc(100% - 2em);
-  //margin: 1em 0;
+  max-width: calc(100% - 2em);
+  // margin: 1em 0;
+}
+
+.FilePreview-container-document {
+  width: max-content;
+  max-width: calc(100% - 2em);
+  // margin: 1em 0;
 }
 
 .FilePreview-container-document .react-pdf-Document {
@@ -80,8 +83,8 @@ input[type="number"] {
 }
 
 .FilePreview-container-document .react-pdf-Page {
-  /*margin: 1em 0;
-  */
+  // margin: 1em 0;
+
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -107,6 +110,42 @@ input[type="number"] {
   padding: 0 5px 5px 5px;
 }
 
+.DropdownMenuButton {
+  background-color: var(--white);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  user-select: none;
+  outline: none;
+  border: none;
+  color: var(--black);
+
+  &:hover {
+    background-color: var(--hover-color-1);
+  }
+
+  @keyframes button-click {
+    0% {
+      background-color: #e5e5e5;
+    }
+    50% {
+      background-color: #d5cece;
+    }
+    100% {
+      background-color: #ffffff;
+    }
+  }
+  &:active {
+    animation: button-click 0.3s;
+  }
+}
+
 .DropdownMenuItem {
   &:hover {
     background-color: var(--hover-color-1);
@@ -123,7 +162,24 @@ input[type="number"] {
     }
   }
   &:active {
-    // background-color: var(--primary);
+    //background-color: var(--primary);
     animation: button-click 0.3s;
+    -webkit-animation: button-click 0.3s;
   }
+}
+
+.tooltipContent {
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--violet-11);
+  background-color: white;
+  box-shadow:
+    hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  user-select: none;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }

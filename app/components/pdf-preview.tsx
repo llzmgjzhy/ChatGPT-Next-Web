@@ -6,7 +6,7 @@ import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
-import "./pdf-preview.scss";
+import styles from "./pdf-preview.module.scss";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import LeftIcon from "../icons/pdf-left.svg";
 import RightIcon from "../icons/pdf-right.svg";
@@ -27,11 +27,16 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
 import Locale from "../locales";
-import { set } from "react-hook-form";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -64,7 +69,6 @@ interface PdfList {
 }
 
 export function PdfBook() {
-  // const [file, setFile] = useState<PDFFile>("http://localhost:5050/pdf");
   let { session } = useSupabase();
   const access_token = session?.access_token || "";
   const [pdfFile, setPdfFile] = useState<PDFFile>("major1");
@@ -79,7 +83,9 @@ export function PdfBook() {
   const [numPages, setNumPages] = useState<number>();
   const [PageNumber, setPageNumber] = useState<number>(1);
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);
-  const [containerWidth, setContainerWidth] = useState<number>(400);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
+  const [isFirstChange, setIsFirstChange] = useState<boolean>(true);
+  const [pageWidth, setPageWidth] = useState<number>(600);
   // get Local querySelect but not need to claim Local type
   const labelName: { [key: string]: string } = Locale.querySelect;
   const [pageScale, setPageScale] = useState<number>(1);
@@ -113,6 +119,14 @@ export function PdfBook() {
       setContainerWidth(entry.contentRect.width);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(containerWidth);
+    if (isFirstChange && containerWidth) {
+      setPageWidth(containerWidth);
+      setIsFirstChange(false);
+    }
+  }, [containerWidth, isFirstChange]);
 
   useResizeObserver(containerRef, resizeObserverOptions, onResize);
 
@@ -156,51 +170,48 @@ export function PdfBook() {
   }
 
   function pageZoomIn() {
-    if (pageScale <= 1.4) {
-      setPageScale(pageScale + 0.1);
+    if (pageWidth * 1.1 < maxWidth) {
+      setPageWidth(pageWidth * 1.1);
     }
   }
 
   function pageZoomOut() {
-    if (pageScale >= 0.6) {
-      setPageScale(pageScale - 0.1);
+    if (pageWidth * 0.9 > 100) {
+      setPageWidth(pageWidth * 0.9);
     }
   }
 
   return (
-    <div className="FilePreview">
-      <div className="FilePreview-container">
-        <div className="FilePreview-container-document" ref={setContainerRef}>
+    <div className={styles["FilePreview"]}>
+      <div className={styles["FilePreview-container"]}>
+        <div
+          className={`${isFirstChange ? styles["FilePreview-container-document-start"] : styles["FilePreview-container-document"]}`}
+          ref={setContainerRef}
+        >
           <Document
             file={file}
             onLoadSuccess={onDocumentLoadSuccess}
             options={options}
           >
-            <div>
-              <Page
-                pageNumber={PageNumber}
-                width={
-                  containerWidth ? Math.min(containerWidth, maxWidth) : maxWidth
-                }
-                renderTextLayer={true}
-                scale={pageScale}
-                className={"FilePreview-container-Page"}
-              />
-            </div>
+            <Page
+              pageNumber={PageNumber}
+              width={pageWidth}
+              renderTextLayer={true}
+            />
           </Document>
         </div>
       </div>
-      <div className="container-content-controls">
+      <div className={styles["container-content-controls"]}>
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <IconButton text={Locale.pdfSelect.title} shadow />
+          <DropdownMenuTrigger className={styles["DropdownMenuButton"]}>
+            {Locale.pdfSelect.title}
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>{Locale.pdfSelect.title}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {Object.keys(pdfList).map((category) => (
               <DropdownMenuSub key={category}>
-                <DropdownMenuSubTrigger className="DropdownMenuItem">
+                <DropdownMenuSubTrigger className={styles["DropdownMenuItem"]}>
                   <span>{labelName[category]}</span>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
@@ -214,7 +225,7 @@ export function PdfBook() {
                         <DropdownMenuRadioItem
                           value={pdf}
                           key={pdf}
-                          className="DropdownMenuItem"
+                          className={styles["DropdownMenuItem"]}
                         >
                           {pdfList[category][pdf].showName}
                         </DropdownMenuRadioItem>
@@ -226,26 +237,61 @@ export function PdfBook() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <IconButton
-          icon={<PlusIcon />}
-          onClick={pageZoomIn}
-          shadow
-          className="container-content-controls-button"
-        />
-        <IconButton
-          icon={<MinusIcon />}
-          onClick={pageZoomOut}
-          shadow
-          className="container-content-controls-button"
-        />
-        <IconButton
-          icon={<LeftIcon />}
-          disabled={(PageNumber || 0) <= 1}
-          onClick={previousPage}
-          shadow
-          className="container-content-controls-button"
-        />
-        <p>
+        <TooltipProvider delayDuration={250}>
+          <Tooltip>
+            <TooltipTrigger>
+              {" "}
+              <IconButton
+                icon={<PlusIcon />}
+                onClick={pageZoomIn}
+                shadow
+                className={styles["container-content-controls-button"]}
+              />
+            </TooltipTrigger>
+            <TooltipContent className={styles["tooltipContent"]}>
+              {Locale.pdfSelect.zoomIn}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider delayDuration={250}>
+          <Tooltip>
+            <TooltipTrigger>
+              {" "}
+              <IconButton
+                icon={<MinusIcon />}
+                onClick={pageZoomOut}
+                shadow
+                className={styles["container-content-controls-button"]}
+              />
+            </TooltipTrigger>
+            <TooltipContent className={styles["tooltipContent"]}>
+              {Locale.pdfSelect.zoomOut}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider delayDuration={250}>
+          <Tooltip>
+            <TooltipTrigger>
+              {" "}
+              <IconButton
+                icon={<LeftIcon />}
+                disabled={(PageNumber || 0) <= 1}
+                onClick={previousPage}
+                shadow
+                className={styles["container-content-controls-button"]}
+              />
+            </TooltipTrigger>
+            <TooltipContent className={styles["tooltipContent"]}>
+              {(PageNumber || 0) <= 1
+                ? Locale.pdfSelect.previousPageEnd
+                : Locale.pdfSelect.previousPage}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <div className="flex items-center justify-center">
           {"  "}
           <input
             onChange={onPageNumberChange}
@@ -253,14 +299,26 @@ export function PdfBook() {
             type="number"
           />
           / {numPages || "--"}
-        </p>
-        <IconButton
-          icon={<RightIcon />}
-          disabled={(PageNumber || 0) >= (numPages || 0)}
-          onClick={nextPage}
-          className="container-content-controls-button"
-          shadow
-        />
+        </div>
+        <TooltipProvider delayDuration={250}>
+          <Tooltip>
+            <TooltipTrigger>
+              {" "}
+              <IconButton
+                icon={<RightIcon />}
+                disabled={(PageNumber || 0) >= (numPages || 0)}
+                onClick={nextPage}
+                className={styles["container-content-controls-button"]}
+                shadow
+              />
+            </TooltipTrigger>
+            <TooltipContent className={styles["tooltipContent"]}>
+              {(PageNumber || 0) >= (numPages || 0)
+                ? Locale.pdfSelect.nextPageEnd
+                : Locale.pdfSelect.nextPage}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );

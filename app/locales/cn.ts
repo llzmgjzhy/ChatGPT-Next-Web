@@ -1,3 +1,4 @@
+import { ZoomIn } from "lucide-react";
 import { getClientConfig } from "../config/client";
 import { SubmitKey } from "../store/config";
 
@@ -524,6 +525,12 @@ const cn = {
   },
   pdfSelect: {
     title: "资料选择",
+    zoomIn: "放大",
+    zoomOut: "缩小",
+    nextPage: "下一页",
+    nextPageEnd: "已是最后一页",
+    previousPage: "上一页",
+    previousPageEnd: "已是第一页",
   },
 };
 

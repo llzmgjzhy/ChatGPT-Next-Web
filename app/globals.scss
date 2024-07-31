@@ -176,6 +176,11 @@ input[type="range"] {
   color: var(--black);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 @mixin thumb() {
   appearance: none;
   height: 8px;

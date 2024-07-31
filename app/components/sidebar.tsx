@@ -166,8 +166,16 @@ export function SideBar(props: { className?: string }) {
     [isMobileScreen],
   );
 
+  // toggle the asd direct and router to new chat
   function onSelectChange(event: string) {
     setAskDirect(event);
+    if (chatStore.sessions[0].chat_id !== "") {
+      router.push(`/chat/${""}`);
+      chatStore.newSession();
+    } else {
+      chatStore.selectSession(0);
+      router.push(`/chat/${""}`);
+    }
   }
 
   useHotKey();
