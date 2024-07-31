@@ -88,7 +88,6 @@ export function PdfBook() {
   const [pageWidth, setPageWidth] = useState<number>(600);
   // get Local querySelect but not need to claim Local type
   const labelName: { [key: string]: string } = Locale.querySelect;
-  const [pageScale, setPageScale] = useState<number>(1);
   useEffect(() => {
     fetch("/pdfCorres.json")
       .then((res) => {
@@ -121,7 +120,6 @@ export function PdfBook() {
   }, []);
 
   useEffect(() => {
-    console.log(containerWidth);
     if (isFirstChange && containerWidth) {
       setPageWidth(containerWidth);
       setIsFirstChange(false);

@@ -111,11 +111,11 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
-import { MultimodalContent } from "../client/api";
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { Loading } from "@/app/components/home";
 import { useChatContext } from "@/lib/context";
-import { Description } from "@radix-ui/react-toast";
+import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
+import { set } from "react-hook-form";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -433,33 +433,32 @@ function CardItem(props: {
 
 export function CardPrompt(props: {
   cardPromptClick: (promptSentence: string) => void;
+  questions: never[];
+  direct: string;
 }) {
+  const icons: Array<keyof typeof iconMap> = [
+    "major",
+    "course",
+    "research",
+    "job",
+  ];
+  const iconMap = {
+    major: <MajorIcon />,
+    course: <CourseIcon />,
+    research: <ResearchIcon />,
+    job: <JobIcon />,
+  };
   return (
     <div className="mx-auto mx-3 mt-10 flex max-w-3xl flex-wrap items-stretch justify-center gap-4">
-      <CardItem
-        icon={<MajorIcon />}
-        title="专业"
-        description="专业如何选择？"
-        click={props.cardPromptClick}
-      />
-      <CardItem
-        icon={<CourseIcon />}
-        title="课程"
-        description="专业的就业前景如何？"
-        click={props.cardPromptClick}
-      />
-      <CardItem
-        icon={<ResearchIcon />}
-        title="研究"
-        description="专业的学分？"
-        click={props.cardPromptClick}
-      />
-      <CardItem
-        icon={<JobIcon />}
-        title="就业"
-        description="专业的介绍？"
-        click={props.cardPromptClick}
-      />
+      {props.questions.map((question, index) => (
+        <CardItem
+          key={index}
+          icon={iconMap[icons[index]] || <MajorIcon />}
+          title={props.direct}
+          description={question}
+          click={props.cardPromptClick}
+        />
+      ))}
     </div>
   );
 }
@@ -758,6 +757,8 @@ function _Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const { submitKey, shouldSubmit } = useSubmitHandler();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { askDirect } = useAskDirectContext();
+  const [cardQuestion, setCardQuestion] = useState<never[]>([]);
   const isScrolledToBottom = scrollRef?.current
     ? Math.abs(
         scrollRef.current.scrollHeight -
@@ -940,6 +941,20 @@ function _Chat() {
     ChatControllerPool.stop(session.id, messageId);
   };
 
+  const getRandomQuestions = (categoryQuestions: [], numQuestions: number) => {
+    // copy array,To avoid modifying the original array
+    const questions: [] = [...categoryQuestions];
+
+    // Fisher-Yates shuffle algorithm
+    for (let i = questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+
+    // choose numQuestions
+    return questions.slice(0, numQuestions);
+  };
+
   useEffect(() => {
     chatStore.updateCurrentSession((session) => {
       const stopTiming = Date.now() - REQUEST_TIMEOUT_MS;
@@ -966,6 +981,19 @@ function _Chat() {
         session.mask.modelConfig = { ...config.modelConfig };
       }
     });
+
+    fetch("/cardPrompts.json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        const categoryQuestions = data[askDirect];
+        const cardQuestion = getRandomQuestions(categoryQuestions, 4);
+        setCardQuestion(cardQuestion);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1613,6 +1641,8 @@ function _Chat() {
             cardPromptClick={(promptSentence: string) => {
               doSubmit(promptSentence);
             }}
+            questions={cardQuestion}
+            direct={askDirect}
           />
         )}
         {!!messageLoading && <Loading />}
