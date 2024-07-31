@@ -115,7 +115,7 @@ import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { Loading } from "@/app/components/home";
 import { useChatContext } from "@/lib/context";
 import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
-import { set } from "react-hook-form";
+import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -758,6 +758,7 @@ function _Chat() {
   const { submitKey, shouldSubmit } = useSubmitHandler();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { askDirect } = useAskDirectContext();
+  const { allChats } = useChatsContext();
   const [cardQuestion, setCardQuestion] = useState<never[]>([]);
   const isScrolledToBottom = scrollRef?.current
     ? Math.abs(
@@ -848,7 +849,11 @@ function _Chat() {
   // if session.topic change,update supabase chat name
   useEffect(() => {
     if (session.chat_id && session.topic !== DEFAULT_TOPIC) {
-      updateChatName(session.chat_id, session.topic);
+      const serverSession = allChats.find((c) => c.chat_id === session.id);
+      const isDifferentTopic = serverSession?.chat_name !== session.topic;
+      if (isDifferentTopic) {
+        updateChatName(session.chat_id, session.topic);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session.chat_id, session.topic]);
@@ -861,14 +866,26 @@ function _Chat() {
       !session.messages[session.messages.length - 1].streaming &&
       !isLoading
     ) {
-      const checkedMessages = session.messages.filter((m) => !m.mId);
+      const checkedMessages = session.messages.filter(
+        (m) => !m.mId && m.mId !== "isSending",
+      );
       if (checkedMessages.length > 0) {
         checkedMessages.forEach((message, index) => {
           if (index % 2 === 0) {
             const userMessage = message.content;
             const botMessage = checkedMessages[index + 1]?.content;
-            addQuestionAnswer(session.chat_id, userMessage, botMessage).then(
-              (messageId) => {
+            session.messages[session.messages.indexOf(message)].mId =
+              "isSending";
+            if (checkedMessages[index + 1]) {
+              session.messages[
+                session.messages.indexOf(checkedMessages[index + 1])
+              ].mId = "isSending";
+            }
+            chatStore.updateCurrentSession((session) => {
+              session.messages = session.messages.concat();
+            });
+            addQuestionAnswer(session.chat_id, userMessage, botMessage)
+              .then((messageId) => {
                 session.messages[session.messages.indexOf(message)].mId =
                   messageId;
                 if (checkedMessages[index + 1]) {
@@ -879,14 +896,25 @@ function _Chat() {
                 chatStore.updateCurrentSession((session) => {
                   session.messages = session.messages.concat();
                 });
-              },
-            );
+              })
+              .catch((e) => {
+                session.messages[session.messages.indexOf(message)].mId = "";
+                if (checkedMessages[index + 1]) {
+                  session.messages[
+                    session.messages.indexOf(checkedMessages[index + 1])
+                  ].mId = "";
+                }
+                chatStore.updateCurrentSession((session) => {
+                  session.messages = session.messages.concat();
+                });
+                console.error(e);
+              });
           }
         });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session.messages, isLoading]);
+  }, [session.messages]);
 
   const doSubmit = (userInput: string) => {
     if (showCard) {

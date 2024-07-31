@@ -308,16 +308,16 @@ export const useChatStore = createPersistStore(
           sessions,
         }));
 
-        showToast(
-          Locale.Home.DeleteToast,
-          {
-            text: Locale.Home.Revert,
-            onClick() {
-              set(() => restoreState);
-            },
-          },
-          5000,
-        );
+        // showToast(
+        //   Locale.Home.DeleteToast,
+        //   {
+        //     text: Locale.Home.Revert,
+        //     onClick() {
+        //       set(() => restoreState);
+        //     },
+        //   },
+        //   5000,
+        // );
 
         const nowSession = get().currentSession();
         // return chat_id for supabase delete

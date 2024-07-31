@@ -184,7 +184,8 @@ export function ChatList(props: { narrow?: boolean }) {
                 }}
                 onDelete={async () => {
                   if (
-                    (!props.narrow && !isMobileScreen) ||
+                    !props.narrow &&
+                    !isMobileScreen &&
                     (await showConfirm(Locale.Home.DeleteChat))
                   ) {
                     if (item.chat_id) {

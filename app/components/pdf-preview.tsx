@@ -88,6 +88,7 @@ export function PdfBook() {
   const [pageWidth, setPageWidth] = useState<number>(600);
   // get Local querySelect but not need to claim Local type
   const labelName: { [key: string]: string } = Locale.querySelect;
+
   useEffect(() => {
     fetch("/pdfCorres.json")
       .then((res) => {
@@ -237,14 +238,11 @@ export function PdfBook() {
         </DropdownMenu>
         <TooltipProvider delayDuration={250}>
           <Tooltip>
-            <TooltipTrigger>
-              {" "}
-              <IconButton
-                icon={<PlusIcon />}
-                onClick={pageZoomIn}
-                shadow
-                className={styles["container-content-controls-button"]}
-              />
+            <TooltipTrigger onClick={pageZoomIn}>
+              <div className={styles["DropdownMenuButton"]}>
+                {" "}
+                <PlusIcon />
+              </div>
             </TooltipTrigger>
             <TooltipContent className={styles["tooltipContent"]}>
               {Locale.pdfSelect.zoomIn}
@@ -254,14 +252,12 @@ export function PdfBook() {
 
         <TooltipProvider delayDuration={250}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger onClick={pageZoomOut}>
               {" "}
-              <IconButton
-                icon={<MinusIcon />}
-                onClick={pageZoomOut}
-                shadow
-                className={styles["container-content-controls-button"]}
-              />
+              <div className={styles["DropdownMenuButton"]}>
+                {" "}
+                <MinusIcon />
+              </div>
             </TooltipTrigger>
             <TooltipContent className={styles["tooltipContent"]}>
               {Locale.pdfSelect.zoomOut}
@@ -271,15 +267,19 @@ export function PdfBook() {
 
         <TooltipProvider delayDuration={250}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger
+              onClick={previousPage}
+              disabled={(PageNumber || 0) <= 1}
+            >
               {" "}
-              <IconButton
-                icon={<LeftIcon />}
-                disabled={(PageNumber || 0) <= 1}
-                onClick={previousPage}
-                shadow
-                className={styles["container-content-controls-button"]}
-              />
+              <div
+                className={`${styles["DropdownMenuButton"]} ${PageNumber <= 1 ? styles["disabled"] : ""}`}
+              >
+                {" "}
+                <div className={styles["icon-button-icon"]}>
+                  <LeftIcon />
+                </div>
+              </div>
             </TooltipTrigger>
             <TooltipContent className={styles["tooltipContent"]}>
               {(PageNumber || 0) <= 1
@@ -300,15 +300,19 @@ export function PdfBook() {
         </div>
         <TooltipProvider delayDuration={250}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger
+              onClick={nextPage}
+              disabled={(PageNumber || 0) >= (numPages || 0)}
+            >
               {" "}
-              <IconButton
-                icon={<RightIcon />}
-                disabled={(PageNumber || 0) >= (numPages || 0)}
-                onClick={nextPage}
-                className={styles["container-content-controls-button"]}
-                shadow
-              />
+              <div
+                className={`${styles["DropdownMenuButton"]} ${PageNumber >= (numPages || 0) ? styles["disabled"] : ""}`}
+              >
+                {" "}
+                <div className={styles["icon-button-icon"]}>
+                  <RightIcon />
+                </div>
+              </div>
             </TooltipTrigger>
             <TooltipContent className={styles["tooltipContent"]}>
               {(PageNumber || 0) >= (numPages || 0)
