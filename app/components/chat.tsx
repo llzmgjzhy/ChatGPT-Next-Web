@@ -116,6 +116,7 @@ import { Loading } from "@/app/components/home";
 import { useChatContext } from "@/lib/context";
 import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
 import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
+import { useMobileSidebarContext } from "@/lib/context/MobileSidebarProvider";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -758,6 +759,7 @@ function _Chat() {
   const { submitKey, shouldSubmit } = useSubmitHandler();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { askDirect } = useAskDirectContext();
+  const { setShowMobileSidebar } = useMobileSidebarContext();
   const { allChats } = useChatsContext();
   const [cardQuestion, setCardQuestion] = useState<never[]>([]);
   const isScrolledToBottom = scrollRef?.current
@@ -1414,7 +1416,7 @@ function _Chat() {
                 icon={<ReturnIcon />}
                 bordered
                 title={Locale.Chat.Actions.ChatList}
-                onClick={() => navigate(Path.Home)}
+                onClick={() => setShowMobileSidebar(true)}
               />
             </div>
           </div>
@@ -1664,15 +1666,18 @@ function _Chat() {
             </Fragment>
           );
         })}
-        {!session?.chat_id && !messageLoading && showCard && (
-          <CardPrompt
-            cardPromptClick={(promptSentence: string) => {
-              doSubmit(promptSentence);
-            }}
-            questions={cardQuestion}
-            direct={askDirect}
-          />
-        )}
+        {!session?.chat_id &&
+          !isMobileScreen &&
+          !messageLoading &&
+          showCard && (
+            <CardPrompt
+              cardPromptClick={(promptSentence: string) => {
+                doSubmit(promptSentence);
+              }}
+              questions={cardQuestion}
+              direct={askDirect}
+            />
+          )}
         {!!messageLoading && <Loading />}
       </div>
 

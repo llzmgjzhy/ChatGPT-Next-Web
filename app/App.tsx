@@ -11,6 +11,10 @@ import { getLang } from "@/app/locales";
 import { ChatsProvider } from "@/lib/context/ChatsProvider";
 import { ChatProvider } from "@/lib/context";
 import { AskDirectProvider } from "@/lib/context/AskDirectProvider";
+import {
+  useMobileSidebarContext,
+  MobileSidebarProvider,
+} from "@/lib/context/MobileSidebarProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 
@@ -20,6 +24,7 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
   const session = useSupabase();
+  const { showMobileSidebar } = useMobileSidebarContext();
 
   return (
     <>
@@ -32,7 +37,11 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
             }`
           }
         >
-          {session.session && <SideBar className={styles["sidebar-show"]} />}
+          {session.session && (
+            <SideBar
+              className={showMobileSidebar ? styles["sidebar-show"] : ""}
+            />
+          )}
           <div
             className={
               session.session
@@ -54,13 +63,15 @@ const AppWithQueryClient = ({ children }: PropsWithChildren): JSX.Element => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <AskDirectProvider>
-          <ChatsProvider>
-            <ChatProvider>
-              <App>{children}</App>
-            </ChatProvider>
-          </ChatsProvider>
-        </AskDirectProvider>
+        <MobileSidebarProvider>
+          <AskDirectProvider>
+            <ChatsProvider>
+              <ChatProvider>
+                <App>{children}</App>
+              </ChatProvider>
+            </ChatsProvider>
+          </AskDirectProvider>
+        </MobileSidebarProvider>
       </QueryClientProvider>
     </>
   );

@@ -24,6 +24,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useChatsList } from "@/app/chat/[chatId]/hooks/useChatsList";
 import { useChatNotificationsSync } from "@/app/chat/[chatId]/hooks/useChatNotificationsSync";
 import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
+import { useMobileSidebarContext } from "@/lib/context/MobileSidebarProvider";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -125,7 +126,7 @@ export function ChatList(props: { narrow?: boolean }) {
   const chatId = params?.chatId as string | undefined;
   const chatStore = useChatStore();
   const { fetchHistory } = useChatNotificationsSync();
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const { setShowMobileSidebar } = useMobileSidebarContext();
 
   useEffect(() => {
     if (
@@ -181,6 +182,7 @@ export function ChatList(props: { narrow?: boolean }) {
                   // navigate(Path.Chat);
                   selectSession(i);
                   router.push(`/chat/${item.chat_id || ""}`);
+                  setShowMobileSidebar(false);
                 }}
                 onDelete={async () => {
                   if (

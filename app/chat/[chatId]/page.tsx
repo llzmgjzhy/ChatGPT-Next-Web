@@ -14,11 +14,13 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { useMobileScreen } from "@/app/utils";
 
 const serverConfig = getServerSideConfig();
 
 export default function ChatPage() {
   const { session } = useSupabase();
+  const isMobileScreen = useMobileScreen();
   useChatNotificationsSync();
 
   useEffect(() => {
@@ -34,9 +36,11 @@ export default function ChatPage() {
           <Chat />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel>
-          <PdfBook />
-        </ResizablePanel>
+        {!isMobileScreen && (
+          <ResizablePanel>
+            <PdfBook />
+          </ResizablePanel>
+        )}
       </ResizablePanelGroup>
       {/* {serverConfig?.isVercel && (
         <>
