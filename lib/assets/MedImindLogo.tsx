@@ -9,7 +9,7 @@ export const MedImindLogo = ({
   size,
   color = "white",
 }: MedImindLogoProps): JSX.Element => {
-  let src = "./medimind_semimedium.svg";
+  const src = "/medimind_medium.webp";
 
   const filter = color === "black" ? "invert(1)" : "none";
 

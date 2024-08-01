@@ -30,6 +30,7 @@ const nextConfig = {
   output: mode,
   images: {
     unoptimized: mode === "export",
+    formats: ['image/webp'], // 确保 WebP 格式被支持
   },
   experimental: {
     forceSwcTransforms: true,

@@ -243,7 +243,7 @@ function DangerItems() {
 
   return (
     <List>
-      <ListItem
+      {/* <ListItem
         title={Locale.Settings.Danger.Reset.Title}
         subTitle={Locale.Settings.Danger.Reset.SubTitle}
       >
@@ -256,8 +256,8 @@ function DangerItems() {
           }}
           type="danger"
         />
-      </ListItem>
-      <ListItem
+      </ListItem> */}
+      {/* <ListItem
         title={Locale.Settings.Danger.Clear.Title}
         subTitle={Locale.Settings.Danger.Clear.SubTitle}
       >
@@ -270,7 +270,7 @@ function DangerItems() {
           }}
           type="danger"
         />
-      </ListItem>
+      </ListItem> */}
       <ListItem
         title={Locale.Settings.Danger.LogOut.Title}
         subTitle={Locale.Settings.Danger.LogOut.SubTitle}
@@ -782,7 +782,7 @@ export function Settings() {
             </Select>
           </ListItem>
 
-          <ListItem title={Locale.Settings.Theme}>
+          {/* <ListItem title={Locale.Settings.Theme}>
             <Select
               value={config.theme}
               onChange={(e) => {
@@ -797,7 +797,7 @@ export function Settings() {
                 </option>
               ))}
             </Select>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem title={Locale.Settings.Lang.Name}>
             <Select
@@ -1271,7 +1271,7 @@ export function Settings() {
           </ListItem>
         </List> */}
 
-        <List>
+        {/* <List>
           <ModelConfigList
             modelConfig={config.modelConfig}
             updateConfig={(updater) => {
@@ -1280,7 +1280,7 @@ export function Settings() {
               config.update((config) => (config.modelConfig = modelConfig));
             }}
           />
-        </List>
+        </List> */}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
