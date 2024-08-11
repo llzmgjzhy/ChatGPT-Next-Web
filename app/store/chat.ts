@@ -22,6 +22,7 @@ import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import { ChatMessage as ChatMessageSupabase } from "@/app/chat/[chatId]/types";
+import { formatInTimeZone } from "date-fns-tz";
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -250,16 +251,21 @@ export const useChatStore = createPersistStore(
         const sessions = get().sessions;
         const sessionIndex = sessions.findIndex((s) => s.chat_id === chat_id);
         const session = sessions[sessionIndex];
+        const messageTime = formatInTimeZone(
+          new Date(messages.message_time + "Z"),
+          "Asia/Shanghai",
+          "yyyy-MM-dd HH:mm:ss",
+        );
         const userMessages = createMessage({
           role: "user",
           content: messages.user_message,
-          date: messages.message_time,
+          date: messageTime,
           mId: messages.message_id,
         });
         const assistantMessages = createMessage({
           role: "assistant",
           content: messages.assistant,
-          date: messages.message_time,
+          date: messageTime,
           mId: messages.message_id,
           streaming: false,
         });

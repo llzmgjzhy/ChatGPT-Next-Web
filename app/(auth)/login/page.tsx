@@ -3,18 +3,21 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-// import MedImindIcon from "../../icons/medimind_medium.svg";
 import { MedImindLogo } from "@/lib/assets/MedImindLogo";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 
 import { EmailLogin } from "./components/EmailLogin";
+import { EmailSignUp } from "./components/EmailSignUp";
 import { useLogin } from "./hooks/useLogin";
 import styles from "./page.module.scss";
 import { EmailAuthContextType } from "./types";
+import { useState, useEffect } from "react";
+import { set } from "date-fns";
 
 const Main = (): JSX.Element => {
   useLogin();
   const { session } = useSupabase();
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const methods = useForm<EmailAuthContextType>({
     defaultValues: {
@@ -36,9 +39,36 @@ const Main = (): JSX.Element => {
           </p>
           <div className={styles.form_container}>
             <FormProvider {...methods}>
-              <EmailLogin />
+              {!isSignUp && <EmailLogin />}
+              {!!isSignUp && <EmailSignUp />}
             </FormProvider>
           </div>
+          {!isSignUp && (
+            <div className="mt-2 text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <button
+                className="underline"
+                onClick={() => {
+                  setIsSignUp(true);
+                }}
+              >
+                Sign up
+              </button>
+            </div>
+          )}
+          {isSignUp && (
+            <div className="mt-2 text-center text-sm">
+              Already have an account?{" "}
+              <button
+                className="underline"
+                onClick={() => {
+                  setIsSignUp(false);
+                }}
+              >
+                Sign in
+              </button>
+            </div>
+          )}
         </section>
       )}
     </div>

@@ -675,7 +675,8 @@ export function ChatActions(props: {
 export function EditMessageModal(props: { onClose: () => void }) {
   const chatStore = useChatStore();
   const session = chatStore.currentSession();
-  const [messages, setMessages] = useState(session.messages.slice());
+  const { updateChatName } = useChat();
+  // const [messages, setMessages] = useState(session.messages.slice());
 
   return (
     <div className="modal-mask">
@@ -697,9 +698,12 @@ export function EditMessageModal(props: { onClose: () => void }) {
             icon={<ConfirmIcon />}
             key="ok"
             onClick={() => {
-              chatStore.updateCurrentSession(
-                (session) => (session.messages = messages),
-              );
+              // chatStore.updateCurrentSession(
+              //   (session) => (session.messages = messages),
+              // );
+              if (session.chat_id && session.topic !== DEFAULT_TOPIC) {
+                updateChatName(session.chat_id, session.topic);
+              }
               props.onClose();
             }}
           />,
@@ -721,14 +725,14 @@ export function EditMessageModal(props: { onClose: () => void }) {
             ></input>
           </ListItem>
         </List>
-        <ContextPrompts
+        {/* <ContextPrompts
           context={messages}
           updateContext={(updater) => {
             const newMessages = messages.slice();
             updater(newMessages);
             setMessages(newMessages);
           }}
-        />
+        /> */}
       </Modal>
     </div>
   );
