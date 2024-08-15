@@ -941,7 +941,7 @@ function _Chat() {
         session.chat_id = chatId;
       });
     }
-    chatStore.onUserInput(userInput, attachImages).then(() => {
+    chatStore.onUserInput(userInput, attachImages, askDirect).then(() => {
       setIsLoading(false);
     });
 
@@ -1030,6 +1030,21 @@ function _Chat() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    fetch("/cardPrompts.json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        const categoryQuestions = data[askDirect];
+        const cardQuestion = getRandomQuestions(categoryQuestions, 4);
+        setCardQuestion(cardQuestion);
+      });
+  }, [askDirect]);
 
   // check if should send message
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -1472,11 +1487,11 @@ function _Chat() {
           )}
         </div>
 
-        <PromptToast
+        {/* <PromptToast
           showToast={!hitBottom}
           showModal={showPromptModal}
           setShowModal={setShowPromptModal}
-        />
+        /> */}
       </div>
 
       <div

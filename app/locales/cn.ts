@@ -521,8 +521,8 @@ const cn = {
     job: "就业",
     postGraduate: "保研",
     course: "课程",
-    title: "选择询问方向",
   },
+  querySelectTitle: "选择询问方向",
   pdfSelect: {
     title: "资料选择",
     zoomIn: "放大",

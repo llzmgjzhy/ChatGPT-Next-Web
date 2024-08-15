@@ -89,6 +89,7 @@ export const getServerSideConfig = () => {
   return {
     baseUrl: process.env.BASE_URL,
     apiKey,
+    apiKeyCourse: process.env.OPENAI_API_KEY_COURSE,
     openaiOrgId: process.env.OPENAI_ORG_ID,
 
     isAzure,

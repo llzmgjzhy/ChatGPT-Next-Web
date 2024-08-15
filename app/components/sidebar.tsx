@@ -234,7 +234,7 @@ export function SideBar(props: { className?: string }) {
       {!shouldNarrow && (
         <Card className="overflow-hidden mb-4">
           <CardHeader>
-            <CardTitle>{Locale.querySelect.title}</CardTitle>
+            <CardTitle>{Locale.querySelectTitle}</CardTitle>
           </CardHeader>
           <CardContent>
             <form>

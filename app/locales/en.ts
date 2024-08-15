@@ -527,8 +527,8 @@ const en: LocaleType = {
     job: "job",
     postGraduate: "postgraduate recommendation",
     course: "course",
-    title: "Select inquiry direction.",
   },
+  querySelectTitle: "Select inquiry direction.",
   pdfSelect: {
     title: "Select pdf file.",
     zoomIn: "zoom in",

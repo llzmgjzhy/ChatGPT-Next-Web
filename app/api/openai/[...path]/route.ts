@@ -44,7 +44,9 @@ async function handle(
       },
     );
   }
-  const authResult = auth(req, ModelProvider.GPT);
+  const cloneReq = req.clone();
+  const body = await cloneReq.json();
+  const authResult = auth(req, ModelProvider.GPT, body?.direct);
   if (authResult.error) {
     return NextResponse.json(authResult, {
       status: 401,
