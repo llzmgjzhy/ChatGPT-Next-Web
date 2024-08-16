@@ -5,9 +5,7 @@ import "./styles/markdown.scss";
 import "./styles/highlight.scss";
 import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
-import { GoogleTagManager } from "@next/third-parties/google";
 import { SupabaseProvider } from "@/lib/context/SupabaseProvider";
 import { cookies, headers } from "next/headers";
 import { App } from "./App";
@@ -63,16 +61,6 @@ const RootLayout = async ({
           <App>{children}</App>
         </SupabaseProvider>
         <Toaster />
-        {serverConfig?.isVercel && (
-          <>
-            <SpeedInsights />
-          </>
-        )}
-        {serverConfig?.gtmId && (
-          <>
-            <GoogleTagManager gtmId={serverConfig.gtmId} />
-          </>
-        )}
       </body>
     </html>
   );
