@@ -58,7 +58,7 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel>{children}</ResizablePanel>
               <ResizableHandle withHandle />
-              {!isMobileScreen && (
+              {!isMobileScreen && session.session && (
                 <ResizablePanel>
                   <PdfBook />
                 </ResizablePanel>
