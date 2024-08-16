@@ -28,7 +28,7 @@ export enum ApiPath {
   Cors = "",
   OpenAI = "/api/openai",
   Anthropic = "/api/anthropic",
-  Pdf = "/pdf",
+  Pdf = "/static/pdfs",
 }
 
 export enum SlotID {

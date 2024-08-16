@@ -13,7 +13,7 @@ export const AskDirectProvider = ({
 }: {
   children: JSX.Element | JSX.Element[];
 }): JSX.Element => {
-  const [askDirect, setAskDirect] = useState<string>("major");
+  const [askDirect, setAskDirect] = useState<string>("undergraduateCatalog");
 
   return (
     <AskDirectContext.Provider

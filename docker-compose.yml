@@ -3,7 +3,7 @@ services:
   chatgpt-next-web:
     # profiles: ["no-proxy"]
     container_name: MedImind
-    image: chatgpt-web:pdf
+    image: chatgpt-web:v1
     pull_policy: never
     volumes:
       - ./.git:/app/.git
@@ -12,6 +12,7 @@ services:
       dockerfile: Dockerfile
       args:
         - OPENAI_API_KEY=${OPENAI_API_KEY}
+        - OPENAI_API_KEY_COURSE=${OPENAI_API_KEY_COURSE}
         - GOOGLE_API_KEY=$GOOGLE_API_KEY
         - CODE=$CODE
         - BASE_URL=${BASE_URL}
@@ -28,7 +29,7 @@ services:
         - SUPABASE_URL=${SUPABASE_URL}
     restart: always
     ports:
-      - 3000:3000
+      - 3002:3002
 
   # chatgpt-next-web-proxy:
   #   profiles: ["proxy"]

@@ -17,6 +17,12 @@ import {
 } from "@/lib/context/MobileSidebarProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import { PdfBook } from "@/app/components/pdf-preview";
 
 const App = ({ children }: PropsWithChildren): JSX.Element => {
   const config = useAppConfig();
@@ -49,7 +55,15 @@ const App = ({ children }: PropsWithChildren): JSX.Element => {
                 : "flex justify-center items-center w-full h-full"
             }
           >
-            {children}
+            <ResizablePanelGroup direction="horizontal">
+              <ResizablePanel>{children}</ResizablePanel>
+              <ResizableHandle withHandle />
+              {!isMobileScreen && (
+                <ResizablePanel>
+                  <PdfBook />
+                </ResizablePanel>
+              )}
+            </ResizablePanelGroup>
           </div>
         </div>
       </Router>

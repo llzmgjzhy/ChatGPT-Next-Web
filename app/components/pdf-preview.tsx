@@ -12,7 +12,6 @@ import LeftIcon from "../icons/pdf-left.svg";
 import RightIcon from "../icons/pdf-right.svg";
 import PlusIcon from "../icons/plus.svg";
 import MinusIcon from "../icons/minus.svg";
-import { IconButton } from "@/app/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +33,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useAskDirectContext } from "@/lib/context/AskDirectProvider";
 import Locale from "../locales";
 
@@ -69,17 +67,25 @@ interface PdfList {
 }
 
 export function PdfBook() {
-  let { session } = useSupabase();
-  const access_token = session?.access_token || "";
-  const [pdfFile, setPdfFile] = useState<PDFFile>("major1");
-  function setFileName(fileName: string = "major1") {
-    const urlPath = `/api/pdf/${fileName}/${access_token}`;
+  const [pdfFile, setPdfFile] = useState<PDFFile>("undergraduateCatalog1");
+  const [pdfList, setPdfList] = useState<PdfList>({});
+  function setFileName(fileName: string = "undergraduateCatalog1") {
+    let pdfName: string = "2024级医学技术本科生培养方案-v1.pdf";
+    if (pdfList) {
+      const pdfCategory = Object.keys(pdfList).find((category) => {
+        return Object.keys(pdfList[category]).includes(fileName);
+      });
+
+      if (pdfCategory) {
+        pdfName = pdfList[pdfCategory][fileName].fileName;
+      }
+    }
+    const urlPath = `/api/pdf/${fileName}/${pdfName}`;
     return urlPath;
   }
   const [file, setFile] = useState<PDFFile>(setFileName());
   // get the askDirect context
   const { askDirect } = useAskDirectContext();
-  const [pdfList, setPdfList] = useState<PdfList>({});
   const [numPages, setNumPages] = useState<number>();
   const [PageNumber, setPageNumber] = useState<number>(1);
   const [containerRef, setContainerRef] = useState<HTMLElement | null>(null);

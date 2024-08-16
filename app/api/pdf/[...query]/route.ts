@@ -5,17 +5,17 @@ async function handle(
   req: NextRequest,
   { params }: { params: { query: string[] } },
 ) {
-  const [pdfFile, access_token] = params.query;
-  req.headers.set("Authorization", `Bearer ${access_token}`);
+  const [pdfFile, detailName] = params.query;
 
   const fetchOptions: RequestInit = {
     method: req.method,
     headers: req.headers,
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+  const modifiedUrl = baseUrl.replace(/:\d+/, "");
   const path = ApiPath.Pdf;
-  const fetchUrl = `${baseUrl}${path}?query=${pdfFile}`;
+  const fetchUrl = `${modifiedUrl}${path}/${detailName}`;
 
   try {
     const res = await fetch(fetchUrl, fetchOptions);
