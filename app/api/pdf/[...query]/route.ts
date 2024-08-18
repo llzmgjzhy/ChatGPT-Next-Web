@@ -28,7 +28,7 @@ async function handle(
       headers: responseHeaders,
     });
   } catch (e) {
-    console.error("[pdf api]", e);
+    console.error("[pdf api error]", e);
   }
 }
 
