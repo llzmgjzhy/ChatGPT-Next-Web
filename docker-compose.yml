@@ -3,7 +3,7 @@ services:
   chatgpt-next-web:
     # profiles: ["no-proxy"]
     container_name: MedImind
-    image: chatgpt-web:v2
+    image: chatgpt-web:v2-pdf
     pull_policy: never
     volumes:
       - ./.git:/app/.git
@@ -23,6 +23,7 @@ services:
         - DISABLE_FAST_LINK=$DISABLE_FAST_LINK
         - OPENAI_SB=$OPENAI_SB
         - NEXT_PUBLIC_ENV=local
+        - NEXT_PUBLIC_BACKEND_DOMAIN_URL=${NEXT_PUBLIC_BACKEND_DOMAIN_URL}
         - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
         - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
         - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}

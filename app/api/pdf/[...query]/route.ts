@@ -12,10 +12,9 @@ async function handle(
     headers: req.headers,
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
-  const modifiedUrl = baseUrl.replace(/:\d+/, "");
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_DOMAIN_URL || "";
   const path = ApiPath.Pdf;
-  const fetchUrl = `${modifiedUrl}${path}/${detailName}`;
+  const fetchUrl = `${baseUrl}${path}/${detailName}`;
 
   try {
     const res = await fetch(fetchUrl, fetchOptions);
