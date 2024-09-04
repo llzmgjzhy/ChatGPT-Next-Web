@@ -5,6 +5,7 @@ import { useChatApi } from "@/lib/api/chat/useChatApi";
 import { useChatsContext } from "@/lib/context/ChatsProvider/hooks/useChatsContext";
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter, useParams } from "next/navigation";
 
 import { useChatStore } from "@/app/store/chat";
 
@@ -13,6 +14,8 @@ export const useChatsList = () => {
   const { toast } = useToast();
   const { getChats } = useChatApi();
   const { session } = useSupabase();
+  const params = useParams();
+  const chatId = params?.chatId as string | undefined;
   const chatStore = useChatStore();
 
   const fetchAllChats = async () => {
@@ -40,8 +43,7 @@ export const useChatsList = () => {
     if (chats) {
       setAllChats(chats);
     }
-    if (chats !== allChats) {
-      chatStore.clearSessions();
+    if (chats !== allChats && !chatId) {
       for (const chat of chats ?? []) {
         chatStore.addSupabaseSessions(chat);
       }

@@ -24,11 +24,7 @@ function parseApiKey(bearToken: string) {
   };
 }
 
-export function auth(
-  req: NextRequest,
-  modelProvider: ModelProvider,
-  direct?: string,
-) {
+export function auth(req: NextRequest, modelProvider: ModelProvider) {
   const authToken = req.headers.get("Authorization") ?? "";
 
   // check if it is openai api key or user token
@@ -86,7 +82,7 @@ export function auth(
         }
     }
 
-    let courseKey = serverConfig.apiKeyCourse;
+    // let courseKey = serverConfig.apiKeyCourse;
 
     if (systemApiKey) {
       console.log("[Auth] use system api key");
@@ -94,9 +90,9 @@ export function auth(
     } else {
       console.log("[Auth] admin did not provide an api key");
     }
-    if (direct?.includes("course")) {
-      req.headers.set("Authorization", `Bearer ${courseKey}`);
-    }
+    // if (direct?.includes("course")) {
+    //   req.headers.set("Authorization", `Bearer ${courseKey}`);
+    // }
   } else {
     console.log("[Auth] use user api key");
   }

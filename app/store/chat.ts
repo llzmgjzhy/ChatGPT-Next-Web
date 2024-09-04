@@ -426,7 +426,7 @@ export const useChatStore = createPersistStore(
         // make request
         api.llm.chat({
           messages: sendMessages,
-          config: { ...modelConfig, stream: true, direct: askDirect },
+          config: { ...modelConfig, stream: true, variables: askDirect },
           onUpdate(message) {
             botMessage.streaming = true;
             if (message) {

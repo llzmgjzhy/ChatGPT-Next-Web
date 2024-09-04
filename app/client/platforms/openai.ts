@@ -46,7 +46,7 @@ interface RequestPayload {
     content: string | MultimodalContent[];
   }[];
   stream?: boolean;
-  direct?: string;
+  variables?: string;
   model: string;
   temperature: number;
   presence_penalty: number;
@@ -120,7 +120,7 @@ export class ChatGPTApi implements LLMApi {
     const requestPayload: RequestPayload = {
       messages,
       stream: options.config.stream,
-      direct: options.config.direct,
+      variables: options.config.variables,
       model: modelConfig.model,
       temperature: modelConfig.temperature,
       presence_penalty: modelConfig.presence_penalty,
