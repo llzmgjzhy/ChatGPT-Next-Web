@@ -43,11 +43,12 @@ export const useChatsList = () => {
     if (chats) {
       setAllChats(chats);
     }
-    if (chats !== allChats && !chatId) {
+    if ((chats !== allChats && !chatId) || chatStore.sessions.length === 1) {
       for (const chat of chats ?? []) {
         chatStore.addSupabaseSessions(chat);
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chats]);
 
